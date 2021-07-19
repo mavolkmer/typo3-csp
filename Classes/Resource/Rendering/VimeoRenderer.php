@@ -1,4 +1,5 @@
 <?php
+
 namespace AndrasOtto\Csp\Resource\Rendering;
 
 /*
@@ -39,7 +40,7 @@ class VimeoRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VimeoRenderer
      */
     public function render(FileInterface $file, $width, $height, array $options = null, $usedPathsRelativeToCurrentScript = false)
     {
-        $iframeTag = parent::render($file,$width, $height, $options, $usedPathsRelativeToCurrentScript);
+        $iframeTag = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);
 
         /** @var Iframe $iframe */
         $iframe = Iframe::parseSrcFromHtml($iframeTag);

@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Utility;
 
-
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Domain\Model\Script;
 
@@ -29,7 +28,8 @@ class ScriptUtility
      * @param bool $trimScript
      * @return string
      */
-    static public function getValidScriptTag($script,  $method = HashTypes::SHA_256, $trimScript = true) {
+    public static function getValidScriptTag($script, $method = HashTypes::SHA_256, $trimScript = true)
+    {
         $scriptObj = new Script($script, $method, $trimScript);
 
         $scriptTag = $scriptObj->generateHtmlTag();

@@ -5,7 +5,6 @@
  * Date: 04/10/2017
  * Time: 10:19
  */
-
 $pathSite = getenv('TYPO3_PATH_WEB');
 
 /** @var Composer\Autoload\ClassLoader $autoloader */

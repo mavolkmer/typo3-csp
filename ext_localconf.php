@@ -20,11 +20,8 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php'][
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][\AndrasOtto\Csp\Evaluation\DataAttributeEvaluation::class] = '';
 
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_adminpanel.php']['extendAdminPanel'][] =
-    \AndrasOtto\Csp\Hooks\AdminPanelViewHook::class;
-
 $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'], [
-    "SCRIPT" => \AndrasOtto\Csp\ContentObject\ScriptContentObject::class
+    'SCRIPT' => \AndrasOtto\Csp\ContentObject\ScriptContentObject::class
 ]);
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
@@ -41,7 +38,7 @@ $GLOBALS['TYPO3_CONF_VARS']['FE']['ContentObjects'] = array_merge($GLOBALS['TYPO
      wizards.newContentElement.wizardItems.special {
        elements {
          csp_iframe {
-           icon = ' . \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('csp') . 'Resources/Public/Backend/Images/csp.png
+           icon = ' . \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('csp') . 'Resources/Public/Backend/Images/csp.png
            title = LLL:EXT:csp/Resources/Private/Language/newContentElements.xlf:iframe.title
            description = LLL:EXT:csp/Resources/Private/Language/newContentElements.xlf:iframe.description
            tt_content_defValues {

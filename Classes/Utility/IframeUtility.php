@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Utility;
 
-
 use AndrasOtto\Csp\Domain\Model\Iframe;
 
 class IframeUtility
@@ -26,7 +25,7 @@ class IframeUtility
      *
      * @var array
      */
-    static protected $acceptedSandboxValues = [
+    protected static $acceptedSandboxValues = [
         'allow-forms',
         'allow-modals',
         'allow-orientation-lock',
@@ -44,7 +43,8 @@ class IframeUtility
      * @param array $conf A config array with the possible values of src|class|name|width|height|sandbox
      * @return string
      */
-    static public function generateIframeTagFromConfigArray($conf){
+    public static function generateIframeTagFromConfigArray($conf)
+    {
         $src = $conf['src'] ?? '';
         $class = $conf['class'] ?? '';
         $name = $conf['name'] ?? '';
@@ -54,7 +54,6 @@ class IframeUtility
         $allowFullScreen = $conf['allowFullScreen'] ?? '';
         $allowPaymentRequest = $conf['allowPaymentRequest'] ?? '';
         $dataAttributes = $conf['dataAttributes'] ??  '';
-
 
         $iframe = new Iframe($src, $class, $name, $width, $height, $sandbox, $allowFullScreen, $allowPaymentRequest, $dataAttributes);
 

@@ -14,30 +14,30 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Hook;
 
-
 use AndrasOtto\Csp\Hooks\PageLayoutView;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class PageLayoutViewTest extends UnitTestCase
 {
 
     /** @var PageLayoutView */
-    protected $subject = null;
+    protected $subject;
 
     /** @var \TYPO3\CMS\Backend\View\PageLayoutView */
-    protected $pageView = null;
+    protected $pageView;
 
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = new PageLayoutView();
         $this->pageView = new \TYPO3\CMS\Backend\View\PageLayoutView();
     }
 
-    protected function getFlexFormConfig() {
+    protected function getFlexFormConfig()
+    {
         $row['list_type'] = 'csp_iframeplugin';
         $row['pi_flexform'] = '<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3FlexForms>
@@ -98,7 +98,8 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function preProcessFunctionCanBeCalled() {
+    public function preProcessFunctionCanBeCalled()
+    {
         $null = null;
         $emptyArray = [];
         $this->subject->preProcess($this->pageView, $null, $null, $null, $emptyArray);
@@ -107,32 +108,36 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function iframePreviewHeaderContentCanBeGenerated() {
+    public function iframePreviewHeaderContentCanBeGenerated()
+    {
         $null = null;
         $headerContent = '';
         $config = $this->getFlexFormConfig();
 
         $this->subject->preProcess($this->pageView, $null, $headerContent, $null, $config);
-        $this->assertEquals('<b>Iframe</b><br>', $headerContent);
+        self::assertEquals('<b>Iframe</b><br>', $headerContent);
     }
     /**
      * @test
      */
-    public function iframePreviewItemContentCanBeGenerated() {
+    public function iframePreviewItemContentCanBeGenerated()
+    {
         $null = null;
         $itemContent = '';
         $config = $this->getFlexFormConfig();
 
         $this->subject->preProcess($this->pageView, $null, $null, $itemContent, $config);
-        $this->assertEquals('<br><b>src: </b><i>https://www.google.de</i><br><b>name: </b><i>test</i><br><b>sandbox: </b><i>allow-popups-to-escape-sandbox,allow-scripts,allow-top-navigation,allow-presentation,allow-popups,allow-pointer-lock,allow-modals,allow-forms,allow-orientation-lock</i><br><b>allowFullScreen: </b><i>1</i><br><b>allowPaymentRequest: </b><i>1</i><br><b>dataAttributes: </b><i>test: test1</i><br><b>class: </b><i></i><br><b>width: </b><i>0</i><br><b>height: </b><i>0</i>',
-            $itemContent);
+        self::assertEquals(
+            '<br><b>src: </b><i>https://www.google.de</i><br><b>name: </b><i>test</i><br><b>sandbox: </b><i>allow-popups-to-escape-sandbox,allow-scripts,allow-top-navigation,allow-presentation,allow-popups,allow-pointer-lock,allow-modals,allow-forms,allow-orientation-lock</i><br><b>allowFullScreen: </b><i>1</i><br><b>allowPaymentRequest: </b><i>1</i><br><b>dataAttributes: </b><i>test: test1</i><br><b>class: </b><i></i><br><b>width: </b><i>0</i><br><b>height: </b><i>0</i>',
+            $itemContent
+        );
     }
-
 
     /**
      * @test
      */
-    public function dataAttributeCanBeGenerated() {
+    public function dataAttributeCanBeGenerated()
+    {
         $null = null;
         $itemContent = '';
         $config['list_type'] = 'csp_iframeplugin';
@@ -150,11 +155,13 @@ class PageLayoutViewTest extends UnitTestCase
 </T3FlexForms>';
 
         $this->subject->preProcess($this->pageView, $null, $null, $itemContent, $config);
-        $this->assertEquals('<br><b>dataAttributes: </b><i>&lt;b&gt;a&lt;d&gt;value</i><br><span class="form-group has-error"><label class="t3js-formengine-label"></label><b>Error: </b>Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "<b>a<d>value" given</span>',
-            $itemContent);
+        self::assertEquals(
+            '<br><b>dataAttributes: </b><i>&lt;b&gt;a&lt;d&gt;value</i><br><span class="form-group has-error"><label class="t3js-formengine-label"></label><b>Error: </b>Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "<b>a<d>value" given</span>',
+            $itemContent
+        );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

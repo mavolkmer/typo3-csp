@@ -1,4 +1,5 @@
 <?php
+
 namespace AndrasOtto\Csp\ContentObject;
 
 /*
@@ -47,12 +48,12 @@ class ScriptContentObject extends TextContentObject
         $hashMethod = HashTypes::SHA_256;
         $trimScript = true;
 
-        if(isset($conf['hashMethod'])) {
+        if (isset($conf['hashMethod'])) {
             $hashMethod = $conf['hashMethod'];
         }
 
-        if(isset($conf['trimScript'])) {
-            $trimScript = boolval($conf['trimScript']);
+        if (isset($conf['trimScript'])) {
+            $trimScript = (bool)($conf['trimScript']);
         }
 
         $content = ScriptUtility::getValidScriptTag($content, $hashMethod, $trimScript);

@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Hook;
 
-
 use AndrasOtto\Csp\Hooks\TypoScriptFrontendControllerHook;
 use AndrasOtto\Csp\Tests\Unit\AbstractUnitTest;
 
@@ -22,18 +21,18 @@ class TypoScriptFrontendControllerHookTest extends AbstractUnitTest
 {
 
     /** @var TypoScriptFrontendControllerHook  */
-    protected $subject = null;
+    protected $subject;
 
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = new TypoScriptFrontendControllerHook();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->subject);
         parent::tearDown();
@@ -42,7 +41,8 @@ class TypoScriptFrontendControllerHookTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function contentPostProcAllCanBeCalled() {
+    public function contentPostProcAllCanBeCalled()
+    {
         $tsfe = $this->setUpFakeTsfe(1);
         $this->subject->contentPostProcAll(['pObj' => $tsfe]);
     }

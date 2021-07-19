@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Constants;
 
-
 class Directives
 {
     /**
@@ -83,7 +82,7 @@ class Directives
     const STYLE_SRC = 'style-src';
 
     /**
-	 * @var string
-	 */
+     * @var string
+     */
     const REPORT_URI = 'report-uri';
 }

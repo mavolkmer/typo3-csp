@@ -1,9 +1,9 @@
 {
-  "name": "ottoandras/typo3-csp",
+  "name": "sourcebroker/typo3-csp",
   "type": "typo3-cms-extension",
   "description": "Generates the Content-Security-Policy response header based on the content of the page",
-  "homepage": "https://github.com/OttoAndras/typo3-csp",
-  "version": "1.0.5",
+  "homepage": "https://github.com/sourcebroker/typo3-csp",
+  "version": "1.1.1",
   "autoload": {
     "psr-4": {
       "AndrasOtto\\Csp\\": "Classes/"
@@ -15,8 +15,8 @@
     }
   },
   "require": {
-    "php": ">=7.0.0",
-    "typo3/cms-core": "~7.6.0||~8.7.0||dev-master"
+    "php": ">=7.3.0",
+    "typo3/cms-core": "~10.4"
   },
   "replace": {
     "csp": "self.version",

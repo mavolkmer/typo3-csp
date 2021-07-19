@@ -14,20 +14,19 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Evaluation;
 
-
 use AndrasOtto\Csp\Evaluation\DataAttributeEvaluation;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class DataAttributeEvaluationTest extends UnitTestCase
 {
 
     /** @var DataAttributeEvaluation  */
-    protected $subject = null;
+    protected $subject;
 
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = new DataAttributeEvaluation();
@@ -36,66 +35,75 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function renderFieldJSReturnsSimpleValue() {
-        $this->assertEquals('return value;',
-            $this->subject->returnFieldJS());
+    public function renderFieldJSReturnsSimpleValue()
+    {
+        self::assertEquals(
+            'return value;',
+            $this->subject->returnFieldJS()
+        );
     }
 
     /**
      * @test
      */
-    public function correctSingleValueIsAccepted() {
+    public function correctSingleValueIsAccepted()
+    {
         $set = true;
         $this->subject->evaluateFieldValue('attr: test', '', $set);
-        $this->assertEquals(true, $set);
+        self::assertTrue($set);
     }
 
     /**
      * @test
      */
-    public function correctMultiValueIsAccepted() {
+    public function correctMultiValueIsAccepted()
+    {
         $set = true;
         $this->subject->evaluateFieldValue('attr1: test; attr2: test test test; attr2', '', $set);
-        $this->assertEquals(true, $set);
+        self::assertTrue($set);
     }
 
     /**
      * @test
      */
-    public function invalidValueIsNotAccepted() {
+    public function invalidValueIsNotAccepted()
+    {
         $set = true;
         $this->subject->evaluateFieldValue('aa<attr1>bb: test', '', $set);
-        $this->assertEquals(false, $set);
+        self::assertFalse($set);
     }
 
     /**
      * @test
      */
-    public function invalidMultiValueIsNotAccepted() {
+    public function invalidMultiValueIsNotAccepted()
+    {
         $set = true;
         $this->subject->evaluateFieldValue('attr: test; attr2: test; aa<attr1>bb: test', '', $set);
-        $this->assertEquals(false, $set);
+        self::assertFalse($set);
     }
 
     /**
      * @test
      */
-    public function trickyEmptyConfigNotSet() {
+    public function trickyEmptyConfigNotSet()
+    {
         $set = true;
         $this->subject->evaluateFieldValue(';  ;       ;', '', $set);
-        $this->assertEquals(false, $set);
+        self::assertFalse($set);
     }
 
     /**
      * @test
      */
-    public function emptyValueSet() {
+    public function emptyValueSet()
+    {
         $set = true;
         $this->subject->evaluateFieldValue('', '', $set);
-        $this->assertEquals(true, $set);
+        self::assertTrue($set);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

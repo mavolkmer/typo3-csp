@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Service;
 
-
 use AndrasOtto\Csp\Constants\Directives;
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Constants\SourceKeywords;
@@ -99,8 +98,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param $directive
      * @param $value
      */
-    private function addDirectiveBlock($blockName, $directive, $value) {
-
+    private function addDirectiveBlock($blockName, $directive, $value)
+    {
         if (!(isset($this->directives[$directive]) && is_array($this->directives[$directive]))) {
             $this->directives[$directive] = [];
         }
@@ -110,11 +109,9 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
         }
 
         //Register each value only once
-        if(!in_array($value, $this->directives[$directive][$blockName])) {
+        if (!in_array($value, $this->directives[$directive][$blockName])) {
             $this->directives[$directive][$blockName][] = $value;
         }
-
-
     }
 
     /**
@@ -137,7 +134,6 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
     {
         $this->checkDirective($directive);
         $this->addDirectiveBlock('expressions', $directive, $expression);
-
     }
 
     /**
@@ -149,7 +145,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      */
     public function addHash($type, $hash)
     {
-        if(!in_array($type, $this->allowedHashAlgorithmValues)) {
+        if (!in_array($type, $this->allowedHashAlgorithmValues)) {
             throw new UnsupportedHashAlgorithmException(
                 sprintf('Unsupported hash algorithm detected \'%s\'', $type)
             );
@@ -206,10 +202,9 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
         return trim(sprintf('%s%s', implode($this->directiveSeparator, $directives), $this->directiveSeparator));
     }
 
-
     /**
      * @param array $directive
-     * @return null|string
+     * @return string|null
      */
     protected function parseDirectiveValue($directive)
     {
@@ -219,7 +214,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
         if (isset($directive['expressions']) && is_array($directive['expressions'])) {
             $expressions = $directive['expressions'];
         }
-        
+
         // Parse the nonces
         if (isset($directive['nonces']) && is_array($directive['nonces'])) {
             foreach ($directive['nonces'] as $nonce) {
@@ -247,7 +242,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param $directive
      * @throws InvalidDirectiveException
      */
-    private function checkDirective($directive) {
+    private function checkDirective($directive)
+    {
         if (!in_array($directive, $this->allowedDirectives)) {
             throw new InvalidDirectiveException(
                 'Tried to add a source set for an CSP invalid directive.'
@@ -275,7 +271,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      *
      * @param string $directive
      */
-    public function resetDirective($directive){
+    public function resetDirective($directive)
+    {
         $this->checkDirective($directive);
 
         unset($this->directives[$directive]);
@@ -284,7 +281,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
     /**
      * Sets the header name
      */
-    public function useReportingMode() {
+    public function useReportingMode()
+    {
         $this->headerName = $this->reportHeaderName;
     }
 }

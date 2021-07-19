@@ -19,49 +19,51 @@ use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\OnlineMedia\Helpers\YouTubeHelper;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class VimeoRendererTest extends UnitTestCase
 {
 
     /** @var VimeoRenderer  */
-    protected $subject = null;
+    protected $subject;
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->subject = $this->getMock(VimeoRenderer::class, ['getOnlineMediaHelper']);
+        $this->subject = $this->getMockClass(VimeoRenderer::class, ['getOnlineMediaHelper']);
         ContentSecurityPolicyManager::resetBuilder();
     }
 
     /**
      * @test
      */
-    public function getPriorityReturnsTen() {
-        $this->assertEquals(10, $this->subject->getPriority());
+    public function getPriorityReturnsTen()
+    {
+        self::assertEquals(10, $this->subject->getPriority());
     }
 
     /**
      * @test
      */
-    public function rendersIframe() {
-        $onlineMediaHelper = $this->getMock(YouTubeHelper::class, ['getOnlineMediaId'], ['youtube']);
-        $onlineMediaHelper->expects($this->once())->method('getOnlineMediaId')->willReturn('test');
-        $this->subject->expects($this->once())->method('getOnlineMediaHelper')->willReturn($onlineMediaHelper);
+    public function rendersIframe()
+    {
+        $onlineMediaHelper = $this->getMockClass(YouTubeHelper::class, ['getOnlineMediaId'], ['youtube']);
+        $onlineMediaHelper->expects(self::once())->method('getOnlineMediaId')->willReturn('test');
+        $this->subject->expects(self::once())->method('getOnlineMediaHelper')->willReturn($onlineMediaHelper);
 
-        $file = $this->getMock(File::class, [], [], '', false);
+        $file = $this->getMockClass(File::class, [], [], '', false);
 
-        $fileReference = $this->getMock(FileReference::class, ['getOriginalFile', 'getProperty'], [], '', false);
-        $fileReference->expects($this->once())->method('getProperty')->willReturn('');
-        $fileReference->expects($this->once())->method('getOriginalFile')->willReturn($file);
+        $fileReference = $this->getMockClass(FileReference::class, ['getOriginalFile', 'getProperty'], [], '', false);
+        $fileReference->expects(self::once())->method('getProperty')->willReturn('');
+        $fileReference->expects(self::once())->method('getOriginalFile')->willReturn($file);
         $this->subject->render($fileReference, 100, 100);
         $header = ContentSecurityPolicyManager::getBuilder()->getHeader();
-        $this->assertEquals('frame-src player.vimeo.com; child-src player.vimeo.com;', $header['value']);
+        self::assertEquals('frame-src player.vimeo.com; child-src player.vimeo.com;', $header['value']);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

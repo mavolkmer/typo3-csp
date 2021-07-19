@@ -2,11 +2,11 @@
 
 // Start configure
 //TYPO3 v7
-if(is_dir( dirname(__FILE__)  . '/../../../../../typo3temp/logs/')) {
-    $log_file = dirname(__FILE__)  . '/../../../../../typo3temp/logs/csp-violations.log';
-    //TYPO3 v8
-} else if(is_dir( dirname(__FILE__)  . '/../../../../../typo3temp/var/logs/')) {
-    $log_file = dirname(__FILE__)  . '/../../../../../typo3temp/var/logs/csp-violations.log';
+if (is_dir(__DIR__ . '/../../../../../typo3temp/logs/')) {
+    $log_file = __DIR__ . '/../../../../../typo3temp/logs/csp-violations.log';
+//TYPO3 v8
+} elseif (is_dir(__DIR__ . '/../../../../../typo3temp/var/logs/')) {
+    $log_file = __DIR__ . '/../../../../../typo3temp/var/logs/csp-violations.log';
 } else {
     exit(0);
 }

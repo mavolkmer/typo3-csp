@@ -14,9 +14,7 @@
 
 namespace AndrasOtto\Csp\Evaluation;
 
-
 use AndrasOtto\Csp\Domain\Model\DataAttribute;
-use FluidTYPO3\Flux\Outlet\Pipe\Exception;
 
 class DataAttributeEvaluation
 {
@@ -25,8 +23,9 @@ class DataAttributeEvaluation
      *
      * @return string JavaScript code for client side validation/evaluation
      */
-    public function returnFieldJS() {
-        return "return value;";
+    public function returnFieldJS()
+    {
+        return 'return value;';
     }
 
     /**
@@ -37,14 +36,14 @@ class DataAttributeEvaluation
      * @param bool $set Boolean defining if the value is written to the database or not. Must be passed by reference and changed if needed.
      * @return string Evaluated field value
      */
-    public function evaluateFieldValue($value, $is_in, &$set) {
-
-        if(trim($value)) {
+    public function evaluateFieldValue($value, $is_in, &$set)
+    {
+        if (trim($value)) {
             try {
                 $dataAttributes = DataAttribute::generateAttributesFromString($value);
                 //If there is only some empty attributes, we are not allow to save the value
-                if(count($dataAttributes) == 0) {
-                    throw new Exception('No dataAttribute was generated.');
+                if (count($dataAttributes) === 0) {
+                    throw new \Exception('No dataAttribute was generated.');
                 }
             } catch (\Exception $e) {
                 $set = false;

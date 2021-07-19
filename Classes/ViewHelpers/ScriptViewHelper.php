@@ -1,4 +1,5 @@
 <?php
+
 namespace AndrasOtto\Csp\ViewHelpers;
 
 /*
@@ -15,26 +16,16 @@ namespace AndrasOtto\Csp\ViewHelpers;
  */
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Domain\Model\Script;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * Renders a script tag
  *
  * Class ScriptViewHelper
- * @package AndrasOtto\Csp\ViewHelpers
  */
 class ScriptViewHelper extends AbstractTagBasedViewHelper
 {
-
     protected $tagName = 'script';
-
-    public function setTagBuilder() {
-        if(!$this->tag) {
-            $this->tag = GeneralUtility::makeInstance(TagBuilder::class);
-        }
-    }
 
     /**
      * Initialize arguments.
@@ -53,12 +44,15 @@ class ScriptViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-        if($scriptText = $this->renderChildren()) {
+        if ($scriptText = $this->renderChildren()) {
             $hashMethod = $this->arguments['hashMethod'] ?? HashTypes::SHA_256;
 
             $script = new Script($scriptText, $hashMethod);
             $this->tag->setContent($script->getScript());
             $script->generateHtmlTag();
+            if ($nonce = $script->getNonce()) {
+                $this->tag->addAttribute('nonce', $nonce);
+            }
         }
         $this->tag->forceClosingTag(true);
         return $this->tag->render();

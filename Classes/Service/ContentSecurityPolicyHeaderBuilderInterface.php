@@ -5,9 +5,7 @@
  * Date: 04/10/2017
  * Time: 20:43
  */
-
 namespace AndrasOtto\Csp\Service;
-
 
 interface ContentSecurityPolicyHeaderBuilderInterface
 {
@@ -31,11 +29,8 @@ interface ContentSecurityPolicyHeaderBuilderInterface
      */
     public function addHash($type, $hash);
 
-
     /**
      * Add a hash value to the script-src.
-     *
-     * @return void
      */
     public function useReportingMode();
 
@@ -50,6 +45,4 @@ interface ContentSecurityPolicyHeaderBuilderInterface
      * @return array
      */
     public function getHeader();
-
-
 }

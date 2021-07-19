@@ -16,20 +16,19 @@ namespace AndrasOtto\Csp\Tests\Unit\Utility;
 
 use AndrasOtto\Csp\Exceptions\InvalidValueException;
 use AndrasOtto\Csp\ViewHelpers\IframeViewHelper;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class IframeViewHelperTest extends UnitTestCase
 {
 
     /** @var IframeViewHelper  */
-    protected $subject = null;
+    protected $subject;
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = GeneralUtility::makeInstance(IframeViewHelper::class);
@@ -40,42 +39,34 @@ class IframeViewHelperTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionWithEmptySrc() {
-        $this->setExpectedException(InvalidValueException::class);
+    public function throwsExceptionWithEmptySrc()
+    {
+        $this->expectException(InvalidValueException::class);
         $this->subject->render('');
     }
 
     /**
      * @test
      */
-    public function rendersIframeTagCorrectly() {
-        $arguments = [
-            "src" => 'https://test.de',
-            "class" => 'test-class multiple',
-            "name" => 'conf-test',
-            "width" => 150,
-            "height" => 160,
-            "sandbox" => 'allow-forms, allow-popups',
-            "allowPaymentRequest" => 1,
-            "allowFullScreen" => 1
-        ];
-        $this->subject->setArguments($arguments);
-        $this->subject->setTagBuilder();
-        $this->subject->initialize();
-        $iframeMarkup = $this->subject->render();
-        $this->assertEquals(
+    public function rendersIframeTagCorrectly()
+    {
+        $iframeMarkup = $this->subject->render(
+            'https://test.de',
+            'test-class multiple',
+            'conf-test',
+            150,
+            160,
+            'allow-forms, allow-popups',
+            1,
+            1
+        );
+        self::assertEquals(
             '<iframe src="https://test.de" name="conf-test" class="test-class multiple" width="150" height="160" sandbox="allow-forms allow-popups" allowfullscreen="allowfullscreen" allowpaymentrequest="allowpaymentrequest"></iframe>',
-            $iframeMarkup);
+            $iframeMarkup
+        );
     }
 
-    /**
-     * @test
-     */
-    public function initializeArgumetsRunsThrough() {
-        $this->subject->initializeArguments();
-    }
-
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

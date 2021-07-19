@@ -14,10 +14,8 @@
 
 namespace AndrasOtto\Csp\Exceptions;
 
-
 use TYPO3\CMS\Extbase\Exception;
 
 class InvalidDirectiveException extends Exception
 {
-
 }

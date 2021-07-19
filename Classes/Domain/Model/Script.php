@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Domain\Model;
 
-
 use AndrasOtto\Csp\Constants\Directives;
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Exceptions\InvalidValueException;
@@ -45,6 +44,11 @@ class Script extends AbstractEntity
     protected $script = '';
 
     /**
+     * @var string
+     */
+    protected $nonce = '';
+
+    /**
      * Script constructor.
      * @param string $script
      * @param string $hashMethod
@@ -52,7 +56,7 @@ class Script extends AbstractEntity
      */
     public function __construct($script, $hashMethod = HashTypes::SHA_256, $trimScript = true)
     {
-        $this->trimScript = boolval($trimScript);
+        $this->trimScript = (bool)$trimScript;
         $this->script = $this->trimScript($script);
         $this->ensureHashMethodIsAllowed($hashMethod);
     }
@@ -64,13 +68,15 @@ class Script extends AbstractEntity
      * @param string $hashMethod
      * @throws InvalidValueException
      */
-    protected function ensureHashMethodIsAllowed($hashMethod){
-        if(in_array($hashMethod, $this->allowedHashMethods)) {
+    protected function ensureHashMethodIsAllowed($hashMethod)
+    {
+        if (in_array($hashMethod, $this->allowedHashMethods)) {
             $this->hashMethod = $hashMethod;
         } else {
             throw new InvalidValueException(
-                sprintf('Only the values "sha256", "sha384" and "sha512" are supported, "%s" given', $hashMethod)
-                , 1505745612);
+                sprintf('Only the values "sha256", "sha384" and "sha512" are supported, "%s" given', $hashMethod),
+                1505745612
+            );
         }
     }
 
@@ -80,14 +86,14 @@ class Script extends AbstractEntity
      * @param $script
      * @return mixed|string
      */
-    protected function trimScript($script){
-
-        if($this->trimScript) {
-            $script = preg_replace("/\t/", "", $script);
+    protected function trimScript($script)
+    {
+        if ($this->trimScript) {
+            $script = preg_replace("/\t/", '', $script);
             $script = preg_replace("/\n|\r\n/", "\n", $script);
             $temp = explode("\n", $script);
             $temp = array_map('trim', $temp);
-            $script = implode("", $temp);
+            $script = implode('', $temp);
             unset($temp);
         }
         return $script;
@@ -100,7 +106,8 @@ class Script extends AbstractEntity
      * @param string $method The sha algorithm sha256 or sha512. Default sha256
      * @return string
      */
-    protected function calculateScriptHash($script, $method = HashTypes::SHA_256) {
+    protected function calculateScriptHash($script, $method = HashTypes::SHA_256)
+    {
         return hash($method, $script, true);
     }
 
@@ -110,29 +117,30 @@ class Script extends AbstractEntity
      * @return string
      * @throws InvalidValueException
      */
-    public function generateHtmlTag(){
+    public function generateHtmlTag()
+    {
         $scriptTagOutput = '';
 
-        if($this->script) {
-
+        if ($this->script) {
             $scriptTagOpen = '<script>';
             $scriptTagEnd = '</script>';
 
             //Two supported methods are nonce and hash, it can be set in the extension configuration
-            if(ContentSecurityPolicyManager::isNonceModeEnabled()) {
-                $nonce = ContentSecurityPolicyManager::getNonce();
+            if (ContentSecurityPolicyManager::isNonceModeEnabled()) {
+                $this->nonce = ContentSecurityPolicyManager::getNonce();
 
                 //registers the nonce value to the script directive
-                ContentSecurityPolicyManager::getBuilder()->addNonce(Directives::SCRIPT_SRC,
-                    $nonce);
+                ContentSecurityPolicyManager::getBuilder()->addNonce(
+                    Directives::SCRIPT_SRC,
+                    $this->nonce
+                );
 
-                $scriptTagOpen = sprintf('<script nonce="%s">', $nonce);
+                $scriptTagOpen = sprintf('<script nonce="%s">', $this->nonce);
             } else {
                 $hash = $this->calculateScriptHash($this->script, $this->hashMethod);
 
                 //registers the hash value to the script directive
-                ContentSecurityPolicyManager::getBuilder()->addHash($this->hashMethod,
-                    $hash);
+                ContentSecurityPolicyManager::getBuilder()->addHash($this->hashMethod, $hash);
             }
 
             $scriptTagOutput = $scriptTagOpen . $this->script . $scriptTagEnd;
@@ -146,7 +154,17 @@ class Script extends AbstractEntity
      *
      * @return string
      */
-    public function getScript() :string {
+    public function getScript(): string
+    {
         return $this->script;
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getNonce(): string
+    {
+        return $this->nonce;
     }
 }
