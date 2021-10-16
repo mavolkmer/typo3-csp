@@ -50,6 +50,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
         Directives::FRAME_SRC,
         Directives::IMG_SRC,
         Directives::MEDIA_SRC,
+        Directives::MANIFEST_SRC,
         Directives::OBJECT_SRC,
         Directives::SCRIPT_SRC,
         Directives::STYLE_SRC,

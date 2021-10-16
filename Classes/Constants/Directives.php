@@ -65,6 +65,11 @@ class Directives
     /**
      * @var string
      */
+    const MANIFEST_SRC = 'manifest-src';
+
+    /**
+     * @var string
+     */
     const MEDIA_SRC = 'media-src';
 
     /**
