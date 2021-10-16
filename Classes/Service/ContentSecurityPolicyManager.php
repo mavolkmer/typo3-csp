@@ -31,9 +31,16 @@ class ContentSecurityPolicyManager implements SingletonInterface
     const DIRECTIVE_POSTFIX = "-src";
 
     const SCRIPT_MODE_HASH = 0;
+
     const SCRIPT_MODE_NONCE = 1;
 
     static private $reportScriptPath = 'Resources/Public/report.php';
+
+    static private $nonSourceDirectives = [
+        DIRECTIVES::BASE_URI,
+        DIRECTIVES::FORM_ACTION,
+        DIRECTIVES::FRAME_ANCESTORS,
+    ];
 
     /**
      * Nonce for the actual rendering.
@@ -175,8 +182,14 @@ class ContentSecurityPolicyManager implements SingletonInterface
 
             if(isset($config['additionalSources.'])) {
                 foreach ($config['additionalSources.'] as $directive => $sources) {
+                    $directive = rtrim($directive, '.');
                     foreach ($sources as $source) {
-                        $builder->addSourceExpression(rtrim($directive, '.') . self::DIRECTIVE_POSTFIX, $source);
+                        if (!in_array($directive, self::$nonSourceDirectives)) {
+                            $builder->addSourceExpression($directive . self::DIRECTIVE_POSTFIX, $source);
+                        }
+                        else {
+                            $builder->addSourceExpression($directive, $source);
+                        }
                     }
                 }
             }
