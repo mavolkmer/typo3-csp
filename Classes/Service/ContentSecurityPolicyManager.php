@@ -203,7 +203,12 @@ class ContentSecurityPolicyManager implements SingletonInterface
                     ) {
 
                         foreach ($preSet['rules.'] as $directive => $source) {
-                            $builder->addSourceExpression($directive . self::DIRECTIVE_POSTFIX, $source);
+                            if (!in_array($directive, self::$nonSourceDirectives)) {
+                                $builder->addSourceExpression($directive . self::DIRECTIVE_POSTFIX, $source);
+                            }
+                            else {
+                                $builder->addSourceExpression($directive, $source);
+                            }
                         }
                     }
                 }
