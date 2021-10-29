@@ -16,7 +16,7 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tslib/class.tslib_fe.php']['contentPo
     \AndrasOtto\Csp\Hooks\TypoScriptFrontendControllerHook::class . '->contentPostProcAll';
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['cms/layout/class.tx_cms_layout.php']['tt_content_drawItem']['csp'] =
-    'EXT:csp/Classes/Hooks/PageLayoutView.php:AndrasOtto\Csp\Hooks\PageLayoutView';
+    \AndrasOtto\Csp\Hooks\PageLayoutView::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals'][\AndrasOtto\Csp\Evaluation\DataAttributeEvaluation::class] = '';
 
