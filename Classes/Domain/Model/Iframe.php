@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Domain\Model;
 
-
 use AndrasOtto\Csp\Constants\Directives;
 use AndrasOtto\Csp\Exceptions\InvalidValueException;
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
@@ -106,15 +105,17 @@ class Iframe extends AbstractEntity
      * @param bool $allowFullScreen
      * @param string $dataAttributes
      */
-    public function __construct($src,
-                                $class = '',
-                                $name = '',
-                                $width = 0,
-                                $height = 0,
-                                $sandbox = '',
-                                $allowPaymentRequest = false,
-                                $allowFullScreen = false,
-                                $dataAttributes = '')
+    public function __construct(
+        $src,
+        $class = '',
+        $name = '',
+        $width = 0,
+        $height = 0,
+        $sandbox = '',
+        $allowPaymentRequest = false,
+        $allowFullScreen = false,
+        $dataAttributes = ''
+    )
     {
         $this->ensureSrc($src);
         $this->class = $class;
@@ -133,23 +134,25 @@ class Iframe extends AbstractEntity
      * @param string $src
      * @throws InvalidValueException
      */
-    protected function ensureSrc($src) {
-        if(!$src) {
+    protected function ensureSrc($src)
+    {
+        if (!$src) {
             throw new InvalidValueException(
                 'Src must be set',
-                1505656675);
+                1505656675
+            );
         }
 
         $host = parse_url($src, PHP_URL_HOST);
 
-        if(!$host) {
+        if (!$host) {
             throw new InvalidValueException(
-                sprintf('Host cannot be extracted from the src value "%s"', $src)
-                , 1505632671);
-        } else {
-            $this->src = $src;
-            $this->srcHost = $host;
+                sprintf('Host cannot be extracted from the src value "%s"', $src),
+                1505632671
+            );
         }
+        $this->src = $src;
+        $this->srcHost = $host;
     }
 
     /**
@@ -158,14 +161,15 @@ class Iframe extends AbstractEntity
      * @param string|int $width
      * @throws InvalidValueException
      */
-    protected function ensureWidth($width) {
-        if(intval($width) === false  || $width < 0) {
+    protected function ensureWidth($width)
+    {
+        if ((int)$width < 0) {
             throw new InvalidValueException(
-                sprintf('Width should be a positive integer or zero, "%s" given', $width)
-                , 1505632672);
-        } else {
-            $this->width = (int)$width;
+                sprintf('Width should be a positive integer or zero, "%s" given', $width),
+                1505632672
+            );
         }
+        $this->width = (int)$width;
     }
 
     /**
@@ -174,14 +178,15 @@ class Iframe extends AbstractEntity
      * @param string|int $height
      * @throws InvalidValueException
      */
-    protected function ensureHeight($height) {
-        if(intval($height) === false || $height < 0) {
+    protected function ensureHeight($height)
+    {
+        if ((int)$height < 0) {
             throw new InvalidValueException(
-                sprintf('Height should be a positive integer or zero, "%s" given', $height)
-                , 1505632672);
-        } else {
-            $this->height = (int)$height;
+                sprintf('Height should be a positive integer or zero, "%s" given', $height),
+                1505632672
+            );
         }
+        $this->height = (int)$height;
     }
 
     /**
@@ -190,17 +195,19 @@ class Iframe extends AbstractEntity
      * @param string $sandbox
      * @throws InvalidValueException
      */
-    protected function ensureSandboxValues($sandbox) {
+    protected function ensureSandboxValues($sandbox)
+    {
         //Sandbox input value is a comma separated list
         $values = preg_split('/,/', $sandbox);
 
         foreach ($values as $value) {
             $value = trim(htmlspecialchars($value));
-            if($value) {
+            if ($value) {
                 if (!in_array($value, $this->acceptedSandboxValues)) {
                     throw new InvalidValueException(
                         sprintf('Not allowed value "%s" for the attribute sandbox.', $value),
-                        1505656673);
+                        1505656673
+                    );
                 }
                 $this->sandbox[] = $value;
             }
@@ -212,8 +219,9 @@ class Iframe extends AbstractEntity
      *
      * @param $allowFullScreen
      */
-    protected function ensureAllowFullScreen($allowFullScreen) {
-        if(boolval($allowFullScreen)) {
+    protected function ensureAllowFullScreen($allowFullScreen)
+    {
+        if ($allowFullScreen) {
             $this->allowFullScreen = true;
         }
     }
@@ -223,8 +231,9 @@ class Iframe extends AbstractEntity
      *
      * @param $allowPaymentRequest
      */
-    protected function ensureAllowPaymentRequest($allowPaymentRequest) {
-        if(boolval($allowPaymentRequest)) {
+    protected function ensureAllowPaymentRequest($allowPaymentRequest)
+    {
+        if ($allowPaymentRequest) {
             $this->allowPaymentRequest = true;
         }
     }
@@ -234,11 +243,10 @@ class Iframe extends AbstractEntity
      *
      * @see DataAttribute::generateAttributesFromString
      * @param $definition
-     *
-     * @return void
      */
-    protected function ensureDataAttributes($definition) {
-        if($definition) {
+    protected function ensureDataAttributes($definition)
+    {
+        if ($definition) {
             // If the data attributes cannot be generated because the definition throws an exception
             // we will set dataAttributes to an empty array.
             try {
@@ -252,14 +260,13 @@ class Iframe extends AbstractEntity
     /**
      * @return string
      */
-    public function getSrc() :string
+    public function getSrc(): string
     {
         return $this->src;
     }
 
     /**
      * @param string $src
-     * @return void
      */
     public function setSrc(string $src)
     {
@@ -269,7 +276,7 @@ class Iframe extends AbstractEntity
     /**
      * @return string
      */
-    public function getClass() :string
+    public function getClass(): string
     {
         return $this->class;
     }
@@ -285,7 +292,7 @@ class Iframe extends AbstractEntity
     /**
      * @return string
      */
-    public function getName() :string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -301,14 +308,13 @@ class Iframe extends AbstractEntity
     /**
      * @return int
      */
-    public function getWidth() :int
+    public function getWidth(): int
     {
         return $this->width;
     }
 
     /**
      * @param int $width
-     * @return void
      */
     public function setWidth(int $width)
     {
@@ -318,7 +324,7 @@ class Iframe extends AbstractEntity
     /**
      * @return int
      */
-    public function getHeight() :int
+    public function getHeight(): int
     {
         return $this->height;
     }
@@ -334,7 +340,7 @@ class Iframe extends AbstractEntity
     /**
      * @return array
      */
-    public function getSandbox() :array
+    public function getSandbox(): array
     {
         return $this->sandbox;
     }
@@ -348,15 +354,15 @@ class Iframe extends AbstractEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isAllowFullScreen() :bool
+    public function isAllowFullScreen(): bool
     {
         return $this->allowFullScreen;
     }
 
     /**
-     * @param boolean $allowFullScreen
+     * @param bool $allowFullScreen
      */
     public function setAllowFullScreen(bool $allowFullScreen)
     {
@@ -364,15 +370,15 @@ class Iframe extends AbstractEntity
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function isAllowPaymentRequest() :bool
+    public function isAllowPaymentRequest(): bool
     {
         return $this->allowPaymentRequest;
     }
 
     /**
-     * @param boolean $allowPaymentRequest
+     * @param bool $allowPaymentRequest
      */
     public function setAllowPaymentRequest(bool $allowPaymentRequest)
     {
@@ -382,7 +388,7 @@ class Iframe extends AbstractEntity
     /**
      * @return array
      */
-    public function getDataAttributes() :array
+    public function getDataAttributes(): array
     {
         return $this->dataAttributes;
     }
@@ -401,43 +407,44 @@ class Iframe extends AbstractEntity
      * @return string
      * @throws InvalidValueException
      */
-    public function generateHtmlTag() {
+    public function generateHtmlTag()
+    {
         $attributes = [];
-        if($this->getSrc()) {
+        if ($this->getSrc()) {
             $attributes['src'] = $this->getSrc();
 
             $this->registerSrcHost();
         }
 
-        if($this->getName()) {
+        if ($this->getName()) {
             $attributes['name'] = htmlspecialchars($this->getName());
         }
 
-        if($this->getClass()) {
+        if ($this->getClass()) {
             $attributes['class'] = htmlspecialchars($this->getClass());
         }
 
-        if($this->getWidth()) {
+        if ($this->getWidth()) {
             $attributes['width'] = $this->getWidth();
         }
 
-        if($this->getHeight()) {
+        if ($this->getHeight()) {
             $attributes['height'] = $this->getHeight();
         }
 
-        if(count($this->getSandbox()) > 0) {
-            $attributes['sandbox'] = implode(" ", $this->getSandbox());
+        if (count($this->getSandbox()) > 0) {
+            $attributes['sandbox'] = implode(' ', $this->getSandbox());
         }
 
-        if($this->isAllowFullScreen()) {
+        if ($this->isAllowFullScreen()) {
             $attributes['allowfullscreen'] = 'allowfullscreen';
         }
 
-        if($this->isAllowPaymentRequest()) {
+        if ($this->isAllowPaymentRequest()) {
             $attributes['allowpaymentrequest'] = 'allowpaymentrequest';
         }
 
-        if(count($this->getDataAttributes()) > 0) {
+        if (count($this->getDataAttributes()) > 0) {
             /** @var DataAttribute $dataAttribute */
             foreach ($this->getDataAttributes() as $dataAttribute) {
                 $attributes[$dataAttribute->getName()] = $dataAttribute->getValue();
@@ -447,12 +454,11 @@ class Iframe extends AbstractEntity
         $iframe = '<iframe ';
 
         foreach ($attributes as $attributeName => $value) {
-            if($value) {
-                $iframe .= sprintf('%s="%s" ',  $attributeName,  $value);
+            if ($value) {
+                $iframe .= sprintf('%s="%s" ', $attributeName, $value);
             } else {
                 $iframe .= $attributeName;
             }
-
         }
 
         return rtrim($iframe) . '></iframe>';
@@ -460,21 +466,22 @@ class Iframe extends AbstractEntity
 
     /**
      * Registers the srcHost into the CSP Header
-     *
-     * @return void
      */
-    public function registerSrcHost() {
-
-        if($this->srcHost) {
+    public function registerSrcHost()
+    {
+        if ($this->srcHost) {
             //Need to add the src host to the content security policy header in the moment as the iframe generated.
             //CSP 1.0
             ContentSecurityPolicyManager::getBuilder()->addSourceExpression(
-                Directives::FRAME_SRC, $this->srcHost);
+                Directives::FRAME_SRC,
+                $this->srcHost
+            );
 
             //CSP 2.0 recommendation
             ContentSecurityPolicyManager::getBuilder()->addSourceExpression(
-                Directives::CHILD_SRC
-                , $this->srcHost);
+                Directives::CHILD_SRC,
+                $this->srcHost
+            );
         }
     }
 
@@ -484,7 +491,8 @@ class Iframe extends AbstractEntity
      * @param $html
      * @return mixed|string
      */
-    static public function parseSrcFromHtml($html) {
+    public static function parseSrcFromHtml($html)
+    {
         $matches = [];
         preg_match('/src="(.*?)"/', $html, $matches);
         $src = $matches[1] ?? '';

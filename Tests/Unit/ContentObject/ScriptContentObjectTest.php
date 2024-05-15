@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\ContentObject;
 
-
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\ContentObject\ScriptContentObject;
 use AndrasOtto\Csp\Tests\Unit\AbstractUnitTest;
@@ -25,12 +24,12 @@ class ScriptContentObjectTest extends AbstractUnitTest
 {
 
     /** @var ScriptContentObject  */
-    protected $subject = null;
+    protected $subject;
 
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +46,8 @@ class ScriptContentObjectTest extends AbstractUnitTest
      * @param int $trimScript
      * @return array
      */
-    private function setUpConfArray($hashMethod = HashTypes::SHA_512, $trimScript = 0) {
+    private function setUpConfArray($hashMethod = HashTypes::SHA_512, $trimScript = 0)
+    {
         $conf = [
             'value' => '  alert("ok");  ',
             'hashMethod' => $hashMethod,
@@ -60,24 +60,26 @@ class ScriptContentObjectTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function generateScriptTag() {
+    public function generateScriptTag()
+    {
         $conf = $this->setUpConfArray();
         $scriptTag = $this->subject->render($conf);
 
-        $this->assertEquals('<script>  alert("ok");  </script>', $scriptTag);
+        self::assertEquals('<script>  alert("ok");  </script>', $scriptTag);
     }
 
     /**
      * @test
      */
-    public function trimScriptTrimsTheTextLeftAndRight() {
+    public function trimScriptTrimsTheTextLeftAndRight()
+    {
         $conf = $this->setUpConfArray(HashTypes::SHA_256, 1);
         $scriptTag = $this->subject->render($conf);
 
-        $this->assertEquals('<script>alert("ok");</script>', $scriptTag);
+        self::assertEquals('<script>alert("ok");</script>', $scriptTag);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

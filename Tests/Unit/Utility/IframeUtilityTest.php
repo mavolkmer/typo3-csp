@@ -14,10 +14,8 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Utility;
 
-
 use AndrasOtto\Csp\Utility\IframeUtility;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class IframeUtilityTest extends UnitTestCase
 {
@@ -25,7 +23,7 @@ class IframeUtilityTest extends UnitTestCase
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }
@@ -33,7 +31,8 @@ class IframeUtilityTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateIframeTagFromConfigArrayMapsPropertiesCorrectly(){
+    public function generateIframeTagFromConfigArrayMapsPropertiesCorrectly()
+    {
         $conf = [
             'src' => 'https://test.de',
             'class' => 'test-class multiple',
@@ -46,12 +45,13 @@ class IframeUtilityTest extends UnitTestCase
         ];
 
         $iframeMarkup = IframeUtility::generateIframeTagFromConfigArray($conf);
-        $this->assertEquals(
+        self::assertEquals(
             '<iframe src="https://test.de" name="conf-test" class="test-class multiple" width="150" height="160" sandbox="allow-forms allow-popups" allowfullscreen="allowfullscreen" allowpaymentrequest="allowpaymentrequest"></iframe>',
-            $iframeMarkup);
+            $iframeMarkup
+        );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

@@ -14,27 +14,25 @@
 
 namespace AndrasOtto\Csp\Service;
 
-
 use AndrasOtto\Csp\Constants\Directives;
 use AndrasOtto\Csp\Exceptions\InvalidClassException;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extensionmanager\Utility\ConfigurationUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class ContentSecurityPolicyManager implements SingletonInterface
 {
-
-    const DIRECTIVE_POSTFIX = "-src";
+    const DIRECTIVE_POSTFIX = '-src';
 
     const SCRIPT_MODE_HASH = 0;
 
     const SCRIPT_MODE_NONCE = 1;
 
-    static private $reportScriptPath = 'Resources/Public/report.php';
+    private static $reportScriptPath = 'Resources/Public/report.php';
 
     static private $nonSourceDirectives = [
         DIRECTIVES::BASE_URI,
@@ -48,34 +46,35 @@ class ContentSecurityPolicyManager implements SingletonInterface
      *
      * @var string
      */
-    static private $nonce = '';
+    private static $nonce = '';
 
     /**
      * @var  ContentSecurityPolicyHeaderBuilder
      */
-    static private $headerBuilder = null;
+    private static $headerBuilder = null;
 
     /**
      * Holds the extension configuration
      *
      * @var array
      */
-    static private $extensionConfiguration = [];
+    private static $extensionConfiguration = [];
 
     /**
      * It is true if the extension config was loaded already
      *
      * @var bool
      */
-    static private $extensionConfigurationLoaded = false;
+    private static $extensionConfigurationLoaded = false;
 
     /**
      * Returns a ContentSecurityPolicyHeaer Builder instance
      *
      * @return ContentSecurityPolicyHeaderBuilder
      */
-    static public function getBuilder() {
-        if(!self::$headerBuilder) {
+    public static function getBuilder()
+    {
+        if (!self::$headerBuilder) {
             self::$headerBuilder = self::createNewBuilderInstance();
         }
         return self::$headerBuilder;
@@ -86,9 +85,10 @@ class ContentSecurityPolicyManager implements SingletonInterface
      *
      * @return string
      */
-    static public function getNonce() {
+    public static function getNonce()
+    {
         //If nonce is not generated yet, generate it first
-        if(!self::$nonce) {
+        if (!self::$nonce) {
             self::$nonce = base64_encode(random_bytes(32));
         }
         return self::$nonce;
@@ -99,14 +99,15 @@ class ContentSecurityPolicyManager implements SingletonInterface
      *
      * @return array
      */
-    static protected function getExtensionConfiguration() {
-        if(!self::$extensionConfigurationLoaded) {
+    protected static function getExtensionConfiguration()
+    {
+        if (!self::$extensionConfigurationLoaded) {
             /** @var ObjectManager $objectManager */
             $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
 
-            /** @var ConfigurationUtility $configurationUtility */
-            $configurationUtility = $objectManager->get(ConfigurationUtility::class);
-            self::$extensionConfiguration = $configurationUtility->getCurrentConfiguration('csp');
+            /** @var ExtensionConfiguration $configurationUtility */
+            $configurationUtility = $objectManager->get(ExtensionConfiguration::class);
+            self::$extensionConfiguration = $configurationUtility->get('csp');
             self::$extensionConfigurationLoaded = true;
         }
         return self::$extensionConfiguration;
@@ -117,9 +118,10 @@ class ContentSecurityPolicyManager implements SingletonInterface
      *
      * @return bool
      */
-    static public function isNonceModeEnabled() {
+    public static function isNonceModeEnabled()
+    {
         $extConfig = self::getExtensionConfiguration();
-        return isset($extConfig['scriptMethod']['value']) && $extConfig['scriptMethod']['value'] == self::SCRIPT_MODE_NONCE;
+        return isset($extConfig['scriptMethod']) && $extConfig['scriptMethod'] == self::SCRIPT_MODE_NONCE;
     }
 
     /**
@@ -129,17 +131,20 @@ class ContentSecurityPolicyManager implements SingletonInterface
      * @return ContentSecurityPolicyHeaderBuilderInterface
      * @throws InvalidClassException
      */
-    static private function createNewBuilderInstance() {
+    private static function createNewBuilderInstance()
+    {
         $className = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['csp']['ContentSecurityPolicyHeaderBuilder'] ??
             ContentSecurityPolicyHeaderBuilder::class;
 
         /** @var ContentSecurityPolicyHeaderBuilderInterface $instance */
         $instance = GeneralUtility::makeInstance($className);
 
-        if(!($instance instanceof ContentSecurityPolicyHeaderBuilderInterface)) {
+        if (!($instance instanceof ContentSecurityPolicyHeaderBuilderInterface)) {
             throw new InvalidClassException(
-                sprintf('The class "%s" must implement the interface ContentSecurityPolicyHeaderBuilderInterface',
-                    $className),
+                sprintf(
+                    'The class "%s" must implement the interface ContentSecurityPolicyHeaderBuilderInterface',
+                    $className
+                ),
                 1505944587
             );
         }
@@ -149,10 +154,9 @@ class ContentSecurityPolicyManager implements SingletonInterface
 
     /**
      * Resets the header builder to a new instance
-     *
-     * @return void
      */
-    static public function resetBuilder() {
+    public static function resetBuilder()
+    {
         self::$headerBuilder = self::createNewBuilderInstance();
     }
 
@@ -160,9 +164,9 @@ class ContentSecurityPolicyManager implements SingletonInterface
      * Resets the extension configuration
      *
      * @internal
-     * @return void
      */
-    static public function reloadConfig() {
+    public static function reloadConfig()
+    {
         self::$extensionConfigurationLoaded = false;
         self::getExtensionConfiguration();
     }
@@ -170,17 +174,16 @@ class ContentSecurityPolicyManager implements SingletonInterface
     /**
      * @param TypoScriptFrontendController $tsfe
      */
-    static public function addTypoScriptSettings($tsfe) {
+    public static function addTypoScriptSettings($tsfe)
+    {
+        $enabled = (bool)($tsfe->config['config']['csp.']['enabled'] ?? false);
 
-        $enabled = boolval($tsfe->config['config']['csp.']['enabled'] ?? false);
-
-        if($enabled) {
-
+        if ($enabled) {
             $builder = self::getBuilder();
 
             $config = $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.'];
 
-            if(isset($config['additionalSources.'])) {
+            if (isset($config['additionalSources.'])) {
                 foreach ($config['additionalSources.'] as $directive => $sources) {
                     $directive = rtrim($directive, '.');
                     foreach ($sources as $source) {
@@ -193,15 +196,13 @@ class ContentSecurityPolicyManager implements SingletonInterface
                     }
                 }
             }
-            if(isset($config['presets.'])
+            if (isset($config['presets.'])
                 && is_array($config['presets.'])) {
-
                 foreach ($config['presets.'] as $preSet) {
-                    $preSetEnabled = boolval($preSet['enabled'] ?? false);
+                    $preSetEnabled = (bool)($preSet['enabled'] ?? false);
                     if ($preSetEnabled
                         && isset($preSet['rules.'])
                     ) {
-
                         foreach ($preSet['rules.'] as $directive => $source) {
                             if (!in_array($directive, self::$nonSourceDirectives)) {
                                 $builder->addSourceExpression($directive . self::DIRECTIVE_POSTFIX, $source);
@@ -213,11 +214,11 @@ class ContentSecurityPolicyManager implements SingletonInterface
                     }
                 }
             }
-            if(isset($config['reportOnly']) &&
+            if (isset($config['reportOnly']) &&
                 $config['reportOnly']) {
                 $builder->useReportingMode();
 
-                if(!isset($config['report-uri'])
+                if (!isset($config['report-uri'])
                     || !$config['report-uri']) {
                     $absoluteReportScriptPath =
                         ExtensionManagementUtility::extPath('csp') . self::$reportScriptPath;
@@ -225,17 +226,18 @@ class ContentSecurityPolicyManager implements SingletonInterface
                     $relativeReportScriptPath =
                         PathUtility::getRelativePath(PATH_site . TYPO3_mainDir, $absoluteReportScriptPath);
 
-                    if($relativeReportScriptPath) {
+                    if ($relativeReportScriptPath) {
                         //Make an absolute path from the site root to the script
                         $relativeReportScriptPath = rtrim(ltrim($relativeReportScriptPath, '.'), '/');
 
-                        $builder->addSourceExpression(Directives::REPORT_URI,
-                            $relativeReportScriptPath);
+                        $builder->addSourceExpression(
+                            Directives::REPORT_URI,
+                            $relativeReportScriptPath
+                        );
                     }
-
                 }
             }
-            if(isset($config['report-uri'])
+            if (isset($config['report-uri'])
                 && $config['report-uri']) {
                 $builder->addSourceExpression(Directives::REPORT_URI, htmlspecialchars($config['report-uri']));
             }
@@ -245,10 +247,11 @@ class ContentSecurityPolicyManager implements SingletonInterface
     /**
      * @return string
      */
-    static public function extractHeaders() {
+    public static function extractHeaders()
+    {
         $responseHeader = '';
         $headers = self::getBuilder()->getHeader();
-        if(count($headers) > 1) {
+        if (count($headers) > 1) {
             $name = $headers['name'] ?? '';
             $value = $headers['value'] ?? '';
 

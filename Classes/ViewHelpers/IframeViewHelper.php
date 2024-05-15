@@ -1,4 +1,5 @@
 <?php
+
 namespace AndrasOtto\Csp\ViewHelpers;
 
 /*
@@ -13,26 +14,18 @@ namespace AndrasOtto\Csp\ViewHelpers;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use AndrasOtto\Csp\Domain\Model\Iframe;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use TYPO3\CMS\Fluid\Core\ViewHelper\TagBuilder;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * Renders an Iframe tag
  *
  * Class IframeViewHelper
- * @package AndrasOtto\Csp\ViewHelpers
  */
 class IframeViewHelper extends AbstractTagBasedViewHelper
 {
     protected $tagName = 'iframe';
-
-    public function setTagBuilder() {
-        if(!$this->tag) {
-            $this->tag = GeneralUtility::makeInstance(TagBuilder::class);
-        }
-    }
 
     /**
      * Initialize arguments.
@@ -57,7 +50,8 @@ class IframeViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-        $iframe = new Iframe($this->arguments['src'], 
+        $iframe = new Iframe(
+            $this->arguments['src'],
             $this->arguments['class'] ?? '',
             $this->arguments['name'] ?? '',
             $this->arguments['width'] ?? 0,
@@ -71,27 +65,26 @@ class IframeViewHelper extends AbstractTagBasedViewHelper
 
         $this->tag->addAttribute('src', $iframe->getSrc());
 
-        if($iframe->getClass()) {
+        if ($iframe->getClass()) {
             $this->tag->addAttribute('name', $iframe->getName());
         }
 
-        if($iframe->getClass()) {
+        if ($iframe->getClass()) {
             $this->tag->addAttribute('class', $iframe->getClass());
         }
-        if($iframe->getWidth()) {
+        if ($iframe->getWidth()) {
             $this->tag->addAttribute('width', $iframe->getWidth());
         }
-        if($iframe->getHeight()) {
+        if ($iframe->getHeight()) {
             $this->tag->addAttribute('height', $iframe->getHeight());
         }
-        if(count($iframe->getSandbox()) > 0) {
-            $this->tag->addAttribute('sandbox', implode(" ", $iframe->getSandbox()));
+        if (count($iframe->getSandbox()) > 0) {
+            $this->tag->addAttribute('sandbox', implode(' ', $iframe->getSandbox()));
         }
-        if($iframe->isAllowFullScreen()) {
-
+        if ($iframe->isAllowFullScreen()) {
             $this->tag->addAttribute('allowfullscreen', 'allowfullscreen');
         }
-        if($iframe->isAllowPaymentRequest()) {
+        if ($iframe->isAllowPaymentRequest()) {
             $this->tag->addAttribute('allowpaymentrequest', 'allowpaymentrequest');
         }
 

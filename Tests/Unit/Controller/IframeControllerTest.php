@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Controller;
 
-
 use AndrasOtto\Csp\Controller\IframeController;
 use AndrasOtto\Csp\Tests\Unit\AbstractUnitTest;
 
@@ -22,12 +21,12 @@ class IframeControllerTest extends AbstractUnitTest
 {
 
     /** @var IframeController  */
-    protected $subject = null;
+    protected $subject;
 
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = new IframeController();
@@ -36,19 +35,20 @@ class IframeControllerTest extends AbstractUnitTest
     /**
      * @param array $settings
      */
-    protected function createMockWithSettings($settings = []) {
+    protected function createMockWithSettings($settings = [])
+    {
         $reflectionClass = new \ReflectionClass(IframeController::class);
 
         $reflectionProperty = $reflectionClass->getProperty('settings');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->subject, $settings);
-
     }
 
     /**
      * @test
      */
-    public function renderActionExists() {
+    public function renderActionExists()
+    {
         $this->createMockWithSettings();
         $this->subject->renderAction();
     }
@@ -56,15 +56,17 @@ class IframeControllerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function returnsCorrectIframeTag() {
+    public function returnsCorrectIframeTag()
+    {
         $this->createMockWithSettings(['iframe' => ['src' => 'https://www.test.com']]);
         $iframeMarkup = $this->subject->renderAction();
-        $this->assertEquals('<iframe src="https://www.test.com"></iframe>',
-            $iframeMarkup);
+        self::assertEquals(
+            '<iframe src="https://www.test.com"></iframe>',
+            $iframeMarkup
+        );
     }
 
-
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

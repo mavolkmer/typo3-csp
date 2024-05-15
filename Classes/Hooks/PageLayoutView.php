@@ -14,24 +14,24 @@
 
 namespace AndrasOtto\Csp\Hooks;
 
-
 use AndrasOtto\Csp\Domain\Model\DataAttribute;
 use TYPO3\CMS\Backend\View\PageLayoutViewDrawItemHookInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class PageLayoutView implements PageLayoutViewDrawItemHookInterface  {
+class PageLayoutView implements PageLayoutViewDrawItemHookInterface
+{
 
     /**
      * Preprocesses the preview rendering of a content element.
      *
      * @param \TYPO3\CMS\Backend\View\PageLayoutView $parentObject Calling parent object
-     * @param boolean $drawItem Whether to draw the item using the default functionalities
+     * @param bool $drawItem Whether to draw the item using the default functionalities
      * @param string $headerContent Header content
      * @param string $itemContent Item content
      * @param array $row Record row of tt_content
-     * @return void
      */
-    public function preProcess(\TYPO3\CMS\Backend\View\PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row) {
+    public function preProcess(\TYPO3\CMS\Backend\View\PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row)
+    {
 
         //Make any action only in case of the correct iframe plugin
         if ($row['list_type'] !== 'csp_iframeplugin') {
@@ -41,7 +41,7 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface  {
 
         $flexform = $this->convertFlexFormToArray($row['pi_flexform']);
 
-        if(isset($flexform['data']['main']['lDEF'])) {
+        if (isset($flexform['data']['main']['lDEF'])) {
             $mainSettings = $flexform['data']['main']['lDEF'];
 
             $attributes = ['src', 'name', 'class', 'sandbox', 'allowFullScreen', 'allowPaymentRequest', 'dataAttributes'];
@@ -50,14 +50,12 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface  {
 
             try {
                 DataAttribute::generateAttributesFromString($mainSettings['settings.iframe.dataAttributes']['vDEF']);
-            } catch (\Exception $e){
+            } catch (\Exception $e) {
                 $itemContent .= '<br><span class="form-group has-error"><label class="t3js-formengine-label"></label><b>Error: </b>' . $e->getMessage() . '</span>';
             }
         }
 
-
-
-        if(isset($flexform['data']['style']['lDEF'])) {
+        if (isset($flexform['data']['style']['lDEF'])) {
             $styleSettings = $flexform['data']['style']['lDEF'];
 
             $attributes = ['class', 'width', 'height'];
@@ -74,7 +72,8 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface  {
      * @param string $flexForm
      * @return mixed
      */
-    protected function convertFlexFormToArray($flexForm) {
+    protected function convertFlexFormToArray($flexForm)
+    {
         return GeneralUtility::xml2array($flexForm);
     }
 
@@ -85,13 +84,14 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface  {
      * @param array $settings
      * @return string
      */
-    private function addAttributes($attributes, $settings) {
+    private function addAttributes($attributes, $settings)
+    {
         $content = '';
 
         foreach ($attributes as $attribute) {
-            if(isset($settings['settings.iframe.'. $attribute]['vDEF'])) {
+            if (isset($settings['settings.iframe.' . $attribute]['vDEF'])) {
                 $value = htmlspecialchars($settings['settings.iframe.' . $attribute]['vDEF']);
-                $content .= "<br><b>" . $attribute . ": </b><i>" . $value . "</i>";
+                $content .= '<br><b>' . $attribute . ': </b><i>' . $value . '</i>';
             }
         }
 

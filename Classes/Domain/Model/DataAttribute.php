@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Domain\Model;
 
-
 use AndrasOtto\Csp\Exceptions\InvalidValueException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
@@ -49,27 +48,30 @@ class DataAttribute extends AbstractEntity
      * @param string $name
      * @throws InvalidValueException
      */
-    protected function ensureName($name){
+    protected function ensureName($name)
+    {
         //No capital letters are allowed.
         $name = strtolower($name);
 
         //Trims the given name, whitespaces are not allowed
         $name = trim($name);
 
-        if($name
-        && $this->isValidXmlName($name)
+        if ($name
+            && $this->isValidXmlName($name)
             && $this->isNotStartWithXML($name)
             && $this->isNotContaionSemicolon($name)
         ) {
             $this->name = htmlspecialchars($name);
-        } else if($name) {
+        } elseif ($name) {
             throw new InvalidValueException(
-                sprintf('Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "%s" given',
-                    $name)
-                , 15057512312);
+                sprintf(
+                    'Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "%s" given',
+                    $name
+                ),
+                15057512312
+            );
         }
     }
-
 
     /**
      * Data attributes names are not allowed to start with xml
@@ -78,7 +80,8 @@ class DataAttribute extends AbstractEntity
      * @param $name
      * @return bool
      */
-    private function isNotStartWithXML($name) {
+    private function isNotStartWithXML($name)
+    {
         return substr($name, 0, 3) !== 'xml';
     }
 
@@ -89,7 +92,8 @@ class DataAttribute extends AbstractEntity
      * @param $name
      * @return bool
      */
-    private function isNotContaionSemicolon($name) {
+    private function isNotContaionSemicolon($name)
+    {
         return !preg_match('/;/', $name);
     }
 
@@ -100,12 +104,12 @@ class DataAttribute extends AbstractEntity
      * @param $name
      * @return bool
      */
-    private function isValidXmlName($name) {
+    private function isValidXmlName($name)
+    {
         try {
             new \DOMElement(":$name");
             return true;
-        }
-        catch (\DOMException $e) {
+        } catch (\DOMException $e) {
             return false;
         }
     }
@@ -116,8 +120,9 @@ class DataAttribute extends AbstractEntity
      * @param string $value
      * @throws InvalidValueException
      */
-    protected function ensureValue($value){
-        if($value) {
+    protected function ensureValue($value)
+    {
+        if ($value) {
             $this->value = trim(htmlspecialchars($value));
         }
     }
@@ -125,13 +130,12 @@ class DataAttribute extends AbstractEntity
     /**
      * @return string
      */
-    public function getName() :string
+    public function getName(): string
     {
-        if(substr($this->name, 0, 5) !== 'data-') {
+        if (substr($this->name, 0, 5) !== 'data-') {
             return self::NAME_PREFIX . $this->name;
-        } else {
-            return $this->name;
         }
+        return $this->name;
     }
 
     /**
@@ -145,7 +149,7 @@ class DataAttribute extends AbstractEntity
     /**
      * @return string
      */
-    public function getValue() :string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -170,18 +174,18 @@ class DataAttribute extends AbstractEntity
      * @return DataAttribute
      * @throws InvalidValueException
      */
-    static public function generateAttributeFromString($attributeDefinition){
+    public static function generateAttributeFromString($attributeDefinition)
+    {
         $definitionParts = preg_split('/:/', $attributeDefinition, 2);
 
         $partCount = count($definitionParts);
 
         if ($partCount > 0 && $partCount <= 2) {
-            if(trim($definitionParts[0])) {
-                if(isset($definitionParts[1])){
+            if (trim($definitionParts[0])) {
+                if (isset($definitionParts[1])) {
                     return new DataAttribute($definitionParts[0], $definitionParts[1]);
-                } else {
-                    return new DataAttribute($definitionParts[0]);
                 }
+                return new DataAttribute($definitionParts[0]);
             }
         }
         //name is empty
@@ -198,12 +202,12 @@ class DataAttribute extends AbstractEntity
      * @param string $definition
      * @return array
      */
-    static public function generateAttributesFromString($definition){
-
+    public static function generateAttributesFromString($definition)
+    {
         $attributes = [];
         $attributeDefinitions = preg_split('/;/', $definition);
         foreach ($attributeDefinitions as $attributeDefinition) {
-            if($attribute = self::generateAttributeFromString($attributeDefinition)) {
+            if ($attribute = self::generateAttributeFromString($attributeDefinition)) {
                 $attributes[] = $attribute;
             }
         }

@@ -14,10 +14,9 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Utility;
 
-
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
 use AndrasOtto\Csp\Utility\ScriptUtility;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class ScriptUtilityTest extends UnitTestCase
 {
@@ -25,7 +24,7 @@ class ScriptUtilityTest extends UnitTestCase
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         ContentSecurityPolicyManager::resetBuilder();
         parent::setUp();
@@ -34,25 +33,26 @@ class ScriptUtilityTest extends UnitTestCase
     /**
      * @test
      */
-    public function scriptTagCorrectlyAttachedToScriptCode() {
+    public function scriptTagCorrectlyAttachedToScriptCode()
+    {
         $preparedScript = ScriptUtility::getValidScriptTag('   alert("Hello!");    ');
-        $this->assertEquals('<script>alert("Hello!");</script>', $preparedScript);
-
+        self::assertEquals('<script>alert("Hello!");</script>', $preparedScript);
     }
 
     /**
      * @test
      */
-    public function hashAddedCorrectly() {
+    public function hashAddedCorrectly()
+    {
         ScriptUtility::getValidScriptTag('var foo = "314"');
         $headers = ContentSecurityPolicyManager::extractHeaders();
-        $this->assertEquals(
+        self::assertEquals(
             'Content-Security-Policy: script-src \'sha256-gPMJwWBMWDx0Cm7ZygJKZIU2vZpiYvzUQjl5Rh37hKs=\';',
-            $headers);
-
+            $headers
+        );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace AndrasOtto\Csp\Resource\Rendering;
 
 /*
@@ -21,7 +22,6 @@ use TYPO3\CMS\Core\Resource\FileInterface;
  */
 class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
 {
-
     public function getPriority()
     {
         return 10;
@@ -39,7 +39,7 @@ class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
      */
     public function render(FileInterface $file, $width, $height, array $options = null, $usedPathsRelativeToCurrentScript = false)
     {
-        $iframeTag = parent::render($file,$width, $height, $options, $usedPathsRelativeToCurrentScript);
+        $iframeTag = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);
 
         /** @var Iframe $iframe */
         $iframe = Iframe::parseSrcFromHtml($iframeTag);

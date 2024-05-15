@@ -14,10 +14,9 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Service;
 
-
+use AndrasOtto\Csp\Exceptions\InvalidClassException;
 use AndrasOtto\Csp\Service\ContentSecurityPolicyHeaderBuilderInterface;
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
-use AndrasOtto\Csp\Exceptions\InvalidClassException;
 use AndrasOtto\Csp\Tests\Unit\AbstractUnitTest;
 use TYPO3\CMS\Backend\FrontendBackendUserAuthentication;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -28,7 +27,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         ContentSecurityPolicyManager::resetBuilder();
@@ -37,7 +36,8 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @return TypoScriptFrontendController
      */
-    private function setUpFakeBeUserAuthentication($admPanelActive) {
+    private function setUpFakeBeUserAuthentication($admPanelActive)
+    {
         $beUser = new FrontendBackendUserAuthentication();
 
         $beUser->extAdminConfig = ['hide' => false];
@@ -51,69 +51,76 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function contentSecurityPolicyBuilderInstanceCreated() {
+    public function contentSecurityPolicyBuilderInstanceCreated()
+    {
         $builder = ContentSecurityPolicyManager::getBuilder();
-        $this->assertInstanceOf(ContentSecurityPolicyHeaderBuilderInterface::class, $builder);
+        self::assertInstanceOf(ContentSecurityPolicyHeaderBuilderInterface::class, $builder);
     }
 
     /**
      * @test
      */
-    public function invalidClassExceptionIfBuilderInterfaceNotImplemented() {
+    public function invalidClassExceptionIfBuilderInterfaceNotImplemented()
+    {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['csp']['ContentSecurityPolicyHeaderBuilder'] =
-           "AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest";
+           'AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest';
 
-        $this->setExpectedException(InvalidClassException::class,
-            'The class "AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest" must implement the interface ContentSecurityPolicyHeaderBuilderInterface',
-            1505944587);
+        $this->expectException(InvalidClassException::class);
+        $this->expectExceptionMessage('The class "AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest" must implement the interface ContentSecurityPolicyHeaderBuilderInterface');
+        $this->expectExceptionCode(1505944587);
         ContentSecurityPolicyManager::resetBuilder();
     }
 
     /**
      * @test
      */
-    public function sameBuilderClassUsed() {
+    public function sameBuilderClassUsed()
+    {
         $builder1 = ContentSecurityPolicyManager::getBuilder();
         $builder2 = ContentSecurityPolicyManager::getBuilder();
-        $this->assertSame($builder2, $builder1);
+        self::assertSame($builder2, $builder1);
     }
 
     /**
      * @test
      */
-    public function resetBuilderCreatesNewBuilder () {
+    public function resetBuilderCreatesNewBuilder()
+    {
         $builder1 = ContentSecurityPolicyManager::getBuilder();
         ContentSecurityPolicyManager::resetBuilder();
         $builder2 = ContentSecurityPolicyManager::getBuilder();
-        $this->assertNotSame($builder2, $builder1);
+        self::assertNotSame($builder2, $builder1);
     }
 
     /**
      * @test
      */
-    public function extractHeadersReturnsEmptyStringByDefault() {
+    public function extractHeadersReturnsEmptyStringByDefault()
+    {
         ContentSecurityPolicyManager::resetBuilder();
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame('', $headers);
+        self::assertSame('', $headers);
     }
 
     /**
      * @test
      */
-    public function addTypoScriptSettingsDoesNothingIfDisabled() {
+    public function addTypoScriptSettingsDoesNothingIfDisabled()
+    {
         $tsfe = $this->setUpFakeTsfe();
 
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame('', $headers);
+        self::assertSame('', $headers);
     }
 
     /**
      * @test
      */
-    public function addTypoScriptSettingsAddsCorrectPresets() {
+    public function addTypoScriptSettingsAddsCorrectPresets()
+    {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
 
@@ -122,17 +129,19 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame(
+        self::assertSame(
             'Content-Security-Policy: script-src www.google-analytics.com stats.g.doubleclick.net '
             . 'https://stats.g.doubleclick.net; img-src www.google-analytics.com '
             . 'stats.g.doubleclick.net https://stats.g.doubleclick.net;',
-            $headers);
+            $headers
+        );
     }
 
     /**
      * @test
      */
-    public function addTypoScriptSettingsAddsAdditionalDomains() {
+    public function addTypoScriptSettingsAddsAdditionalDomains()
+    {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
@@ -147,16 +156,18 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame(
+        self::assertSame(
             'Content-Security-Policy: script-src \'self\' www.test.de www.google-analytics.com stats.g.doubleclick.net '
             . 'https://stats.g.doubleclick.net; img-src www.google-analytics.com '
             . 'stats.g.doubleclick.net https://stats.g.doubleclick.net;',
-            $headers);
+            $headers
+        );
     }
     /**
     * @test
     */
-    public function reportOnlyModeGeneratesDefaultUriIfReportUriNotSet() {
+    public function reportOnlyModeGeneratesDefaultUriIfReportUriNotSet()
+    {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
@@ -173,18 +184,20 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame(
+        self::assertSame(
             'Content-Security-Policy-Report-Only: script-src \'self\' www.test.de www.google-analytics.com stats.g.doubleclick.net '
             . 'https://stats.g.doubleclick.net; img-src www.google-analytics.com '
             . 'stats.g.doubleclick.net https://stats.g.doubleclick.net; '
             . 'report-uri /typo3conf/ext/csp/Resources/Public/report.php;',
-            $headers);
+            $headers
+        );
     }
 
     /**
      * @test
      */
-    public function correctUriRegisteredIfReportUriSet() {
+    public function correctUriRegisteredIfReportUriSet()
+    {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
@@ -194,15 +207,16 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
 
-        $this->assertSame(
+        self::assertSame(
             'Content-Security-Policy: script-src www.google-analytics.com stats.g.doubleclick.net '
             . 'https://stats.g.doubleclick.net; img-src www.google-analytics.com '
             . 'stats.g.doubleclick.net https://stats.g.doubleclick.net; '
             . 'report-uri /test/;',
-            $headers);
+            $headers
+        );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

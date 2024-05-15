@@ -17,75 +17,72 @@ namespace AndrasOtto\Csp\Tests\Unit\Utility;
 use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
 use AndrasOtto\Csp\ViewHelpers\ScriptViewHelper;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class ScriptViewHelperTest extends UnitTestCase
 {
 
     /** @var ScriptViewHelper  */
-    protected $subject = null;
+    protected $subject;
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->subject = GeneralUtility::makeInstance(ScriptViewHelper::class);
         $renderingContext = GeneralUtility::makeInstance(RenderingContext::class);
         $this->subject->setRenderingContext($renderingContext);
         ContentSecurityPolicyManager::resetBuilder();
-        $this->subject->setTagBuilder();
     }
 
     /**
      * @test
      */
-    public function initializeArgumetsRunsThrough() {
-        $this->subject->initializeArguments();
-    }
-
-    /**
-     * @test
-     */
-    public function rendersEmptyScriptTag() {
-
-        $closure = function() {
+    public function rendersEmptyScriptTag()
+    {
+        $closure = function () {
             return '';
         };
 
         $this->subject->setRenderChildrenClosure($closure);
 
-        $scriptMarkup = $this->subject->render();
+        $scriptMarkup = $this->subject->render(
+            HashTypes::SHA_256
+        );
 
-        $this->assertEquals(
-            "",
-            $scriptMarkup);
+        self::assertEquals(
+            '',
+            $scriptMarkup
+        );
     }
 
     /**
      * @test
      */
-    public function rendersScriptTagCorrectly() {
-
-        $closure = function() {
+    public function rendersScriptTagCorrectly()
+    {
+        $closure = function () {
             return '
                 alert(\'test\');
             ';
         };
-        $this->subject->initialize();
+
         $this->subject->setRenderChildrenClosure($closure);
 
-        $scriptMarkup = $this->subject->render();
+        $scriptMarkup = $this->subject->render(
+            HashTypes::SHA_256
+        );
 
-        $this->assertEquals(
+        self::assertEquals(
             "<script>alert('test');</script>",
-            $scriptMarkup);
+            $scriptMarkup
+        );
     }
 
-
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         unset($this->subject);

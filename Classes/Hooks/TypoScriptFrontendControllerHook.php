@@ -12,9 +12,7 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-
 namespace AndrasOtto\Csp\Hooks;
-
 
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
@@ -23,31 +21,29 @@ class TypoScriptFrontendControllerHook
 {
     /**
      * Renders the content security headers
-     * 
+     *
      * @param $pObjArray
      */
     public function contentPostProcAll($pObjArray)
     {
-        if(isset($pObjArray['pObj'])) {
+        if (isset($pObjArray['pObj'])) {
             /** @var TypoScriptFrontendController $typoScriptFrontendController */
             $typoScriptFrontendController = $pObjArray['pObj'];
-            $enabled = boolval($typoScriptFrontendController->config['config']['csp.']['enabled'] ?? false);
+            $enabled = (bool)($typoScriptFrontendController->config['config']['csp.']['enabled'] ?? false);
 
-            if($enabled) {
-
+            if ($enabled) {
                 ContentSecurityPolicyManager::addTypoScriptSettings($typoScriptFrontendController);
 
                 $headers = ContentSecurityPolicyManager::extractHeaders();
 
                 if ($headers && isset($typoScriptFrontendController->config['config'])) {
-
-                    if(!isset($typoScriptFrontendController->config['config']['additionalHeaders.'])) {
+                    if (!isset($typoScriptFrontendController->config['config']['additionalHeaders.'])) {
                         $typoScriptFrontendController->config['config']['additionalHeaders.'] = [];
                     }
 
                     $typoScriptFrontendController->config['config']['additionalHeaders.'][81247]['header'] = $headers;
                 }
             }
-        }        
+        }
     }
 }

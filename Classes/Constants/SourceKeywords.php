@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Constants;
 
-
 class SourceKeywords
 {
     /**

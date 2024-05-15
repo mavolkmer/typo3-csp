@@ -14,13 +14,12 @@
 
 namespace AndrasOtto\Csp\Tests\Unit;
 
-
 use TYPO3\CMS\Core\Cache\Backend\NullBackend;
 use TYPO3\CMS\Core\Cache\CacheManager;
 use TYPO3\CMS\Core\Cache\Frontend\VariableFrontend;
-use TYPO3\CMS\Core\Tests\UnitTestCase;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 class AbstractUnitTest extends UnitTestCase
 {
@@ -28,7 +27,7 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * Setup global
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -38,7 +37,8 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * Sets the NullBackend Cache class to some caches to turn them off.
      */
-    private function turnOffCaches() {
+    private function turnOffCaches()
+    {
         /** @var CacheManager $cacheManager */
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
 
@@ -66,7 +66,8 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * @return TypoScriptFrontendController
      */
-    protected function setUpFakeTsfe($enabled = 0) {
+    protected function setUpFakeTsfe($enabled = 0)
+    {
         $tsfe = new TypoScriptFrontendController([], 0, 0);
         $tsfe->tmpl = new \stdClass();
         $tsfe->config['config']['csp.'] = [
@@ -94,11 +95,11 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * @test
      */
-    public function dummyTest() {
-
+    public function dummyTest()
+    {
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
