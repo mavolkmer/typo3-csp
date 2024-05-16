@@ -1,4 +1,10 @@
-AndrasOtto\Csp\ContentObject\ScriptContentObject:
-  tags:
-    - name: frontend.contentobject
-      identifier: 'SCRIPT'
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  AndrasOtto\Csp\ContentObject\ScriptContentObject:
+    tags:
+      - name: frontend.contentobject
+        identifier: 'SCRIPT'
