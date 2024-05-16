@@ -19,75 +19,75 @@ class Directives
     /**
      * @var string
      */
-    const BASE_URI = 'base-uri';
+    public const BASE_URI = 'base-uri';
 
     /**
      * @var string
      */
-    const CHILD_SRC = 'child-src';
+    public const CHILD_SRC = 'child-src';
 
     /**
      * @var string
      */
-    const CONNECT_SRC = 'connect-src';
+    public const CONNECT_SRC = 'connect-src';
 
     /**
      * @var string
      */
-    const DEFAULT_SRC = 'default-src';
+    public const DEFAULT_SRC = 'default-src';
 
     /**
      * @var string
      */
-    const FONT_SRC = 'font-src';
+    public const FONT_SRC = 'font-src';
 
     /**
      * @var string
      */
-    const FORM_ACTION = 'form-action';
+    public const FORM_ACTION = 'form-action';
 
     /**
      * @var string
      */
-    const FRAME_ANCESTORS = 'frame-ancestors';
+    public const FRAME_ANCESTORS = 'frame-ancestors';
 
     /**
      * @var string
      */
-    const FRAME_SRC = 'frame-src';
+    public const FRAME_SRC = 'frame-src';
 
     /**
      * @var string
      */
-    const IMG_SRC = 'img-src';
+    public const IMG_SRC = 'img-src';
 
     /**
      * @var string
      */
-    const MANIFEST_SRC = 'manifest-src';
+    public const MANIFEST_SRC = 'manifest-src';
 
     /**
      * @var string
      */
-    const MEDIA_SRC = 'media-src';
+    public const MEDIA_SRC = 'media-src';
 
     /**
      * @var string
      */
-    const OBJECT_SRC = 'object-src';
+    public const OBJECT_SRC = 'object-src';
 
     /**
      * @var string
      */
-    const SCRIPT_SRC = 'script-src';
+    public const SCRIPT_SRC = 'script-src';
 
     /**
      * @var string
      */
-    const STYLE_SRC = 'style-src';
+    public const STYLE_SRC = 'style-src';
 
     /**
      * @var string
      */
-    const REPORT_URI = 'report-uri';
+    public const REPORT_URI = 'report-uri';
 }

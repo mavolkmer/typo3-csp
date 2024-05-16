@@ -19,7 +19,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 class DataAttribute extends AbstractEntity
 {
-    const NAME_PREFIX = 'data-';
+    public const NAME_PREFIX = 'data-';
 
     /**
      * @var string
@@ -82,7 +82,7 @@ class DataAttribute extends AbstractEntity
      */
     private function isNotStartWithXML($name)
     {
-        return substr($name, 0, 3) !== 'xml';
+        return !str_starts_with((string) $name, 'xml');
     }
 
     /**
@@ -94,7 +94,7 @@ class DataAttribute extends AbstractEntity
      */
     private function isNotContaionSemicolon($name)
     {
-        return !preg_match('/;/', $name);
+        return !preg_match('/;/', (string) $name);
     }
 
     /**
@@ -109,7 +109,7 @@ class DataAttribute extends AbstractEntity
         try {
             new \DOMElement(":$name");
             return true;
-        } catch (\DOMException $e) {
+        } catch (\DOMException) {
             return false;
         }
     }
@@ -132,16 +132,13 @@ class DataAttribute extends AbstractEntity
      */
     public function getName(): string
     {
-        if (substr($this->name, 0, 5) !== 'data-') {
+        if (!str_starts_with($this->name, 'data-')) {
             return self::NAME_PREFIX . $this->name;
         }
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->ensureName($name);
     }
@@ -154,10 +151,7 @@ class DataAttribute extends AbstractEntity
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     */
-    public function setValue(string $value)
+    public function setValue(string $value): void
     {
         $this->ensureValue($value);
     }

@@ -26,6 +26,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -35,7 +36,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function renderFieldJSReturnsSimpleValue()
+    public function renderFieldJSReturnsSimpleValue(): void
     {
         self::assertEquals(
             'return value;',
@@ -46,7 +47,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function correctSingleValueIsAccepted()
+    public function correctSingleValueIsAccepted(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue('attr: test', '', $set);
@@ -56,7 +57,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function correctMultiValueIsAccepted()
+    public function correctMultiValueIsAccepted(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue('attr1: test; attr2: test test test; attr2', '', $set);
@@ -66,7 +67,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function invalidValueIsNotAccepted()
+    public function invalidValueIsNotAccepted(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue('aa<attr1>bb: test', '', $set);
@@ -76,7 +77,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function invalidMultiValueIsNotAccepted()
+    public function invalidMultiValueIsNotAccepted(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue('attr: test; attr2: test; aa<attr1>bb: test', '', $set);
@@ -86,7 +87,7 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function trickyEmptyConfigNotSet()
+    public function trickyEmptyConfigNotSet(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue(';  ;       ;', '', $set);
@@ -96,13 +97,14 @@ class DataAttributeEvaluationTest extends UnitTestCase
     /**
      * @test
      */
-    public function emptyValueSet()
+    public function emptyValueSet(): void
     {
         $set = true;
         $this->subject->evaluateFieldValue('', '', $set);
         self::assertTrue($set);
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

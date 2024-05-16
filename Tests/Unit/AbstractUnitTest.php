@@ -27,6 +27,7 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -37,7 +38,7 @@ class AbstractUnitTest extends UnitTestCase
     /**
      * Sets the NullBackend Cache class to some caches to turn them off.
      */
-    private function turnOffCaches()
+    private function turnOffCaches(): void
     {
         /** @var CacheManager $cacheManager */
         $cacheManager = GeneralUtility::makeInstance(CacheManager::class);
@@ -73,7 +74,7 @@ class AbstractUnitTest extends UnitTestCase
         $tsfe->config['config']['csp.'] = [
             'enabled' => $enabled
         ];
-        $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.']['presets.'] = [
+        $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.']['presets.'] = [
             'googleAnalytics' => [
                 'enabled' => 1,
                 'rules.' => [
@@ -99,6 +100,7 @@ class AbstractUnitTest extends UnitTestCase
     {
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

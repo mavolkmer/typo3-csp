@@ -30,7 +30,7 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface
      * @param string $itemContent Item content
      * @param array $row Record row of tt_content
      */
-    public function preProcess(\TYPO3\CMS\Backend\View\PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row)
+    public function preProcess(\TYPO3\CMS\Backend\View\PageLayoutView &$parentObject, &$drawItem, &$headerContent, &$itemContent, array &$row): void
     {
 
         //Make any action only in case of the correct iframe plugin
@@ -90,7 +90,7 @@ class PageLayoutView implements PageLayoutViewDrawItemHookInterface
 
         foreach ($attributes as $attribute) {
             if (isset($settings['settings.iframe.' . $attribute]['vDEF'])) {
-                $value = htmlspecialchars($settings['settings.iframe.' . $attribute]['vDEF']);
+                $value = htmlspecialchars((string) $settings['settings.iframe.' . $attribute]['vDEF']);
                 $content .= '<br><b>' . $attribute . ': </b><i>' . $value . '</i>';
             }
         }

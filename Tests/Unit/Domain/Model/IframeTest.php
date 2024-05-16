@@ -27,6 +27,7 @@ class IframeTest extends UnitTestCase
     /**
      * Setup global$
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -35,7 +36,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateIframeWithSrcOnly()
+    public function generateIframeWithSrcOnly(): void
     {
         $this->iframe = new Iframe('http://test.de');
         self::assertEquals('<iframe src="http://test.de"></iframe>', $this->iframe->generateHtmlTag());
@@ -44,7 +45,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function missingSrcThrowsException()
+    public function missingSrcThrowsException(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Src must be set');
@@ -55,7 +56,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function wrongHostInSrcThrowsException()
+    public function wrongHostInSrcThrowsException(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Host cannot be extracted from the src value "test.de"');
@@ -66,7 +67,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function classSetCorrectlyIfProvided()
+    public function classSetCorrectlyIfProvided(): void
     {
         $this->iframe = new Iframe('http://test.de', 'class');
         self::assertEquals('<iframe src="http://test.de" class="class"></iframe>', $this->iframe->generateHtmlTag());
@@ -75,7 +76,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function nameSetCorrectlyIfProvided()
+    public function nameSetCorrectlyIfProvided(): void
     {
         $this->iframe = new Iframe('http://test.de', '', 'test');
         self::assertEquals('<iframe src="http://test.de" name="test"></iframe>', $this->iframe->generateHtmlTag());
@@ -84,7 +85,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function notAllowedSandboxValueThrowsException()
+    public function notAllowedSandboxValueThrowsException(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Not allowed value "test" for the attribute sandbox.');
@@ -95,7 +96,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function oneSanBoxValueSetCorrectlyIfProvided()
+    public function oneSanBoxValueSetCorrectlyIfProvided(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, 'allow-forms');
         self::assertEquals('<iframe src="http://test.de" sandbox="allow-forms"></iframe>', $this->iframe->generateHtmlTag());
@@ -104,7 +105,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function multipleSanBoxValueSetCorrectlyIfProvided()
+    public function multipleSanBoxValueSetCorrectlyIfProvided(): void
     {
         $this->iframe = new Iframe(
             'http://test.de',
@@ -123,7 +124,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function negativeIntegerIgnoredAsWidth()
+    public function negativeIntegerIgnoredAsWidth(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Width should be a positive integer or zero, "-100" given');
@@ -134,7 +135,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function negativeIntegerIgnoredAsHeight()
+    public function negativeIntegerIgnoredAsHeight(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Height should be a positive integer or zero, "-100" given');
@@ -145,7 +146,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function notIntegerIgnoredAsWidth()
+    public function notIntegerIgnoredAsWidth(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 'hundred');
         self::assertEquals('<iframe src="http://test.de"></iframe>', $this->iframe->generateHtmlTag());
@@ -154,7 +155,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function notIntegerIgnoredAsHeight()
+    public function notIntegerIgnoredAsHeight(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 'hundred');
         self::assertEquals('<iframe src="http://test.de"></iframe>', $this->iframe->generateHtmlTag());
@@ -163,7 +164,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function correctIntegerAcceptedAsWidth()
+    public function correctIntegerAcceptedAsWidth(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', '150');
         self::assertEquals('<iframe src="http://test.de" width="150"></iframe>', $this->iframe->generateHtmlTag());
@@ -172,7 +173,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function correctIntegerAcceptedAsHeight()
+    public function correctIntegerAcceptedAsHeight(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, '111');
         self::assertEquals('<iframe src="http://test.de" height="111"></iframe>', $this->iframe->generateHtmlTag());
@@ -181,7 +182,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function allowPaymentRequestCanSetCorrectly()
+    public function allowPaymentRequestCanSetCorrectly(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, '', true);
         self::assertEquals(
@@ -193,7 +194,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function allowFullScreenCanSetCorrectly()
+    public function allowFullScreenCanSetCorrectly(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, '', 0, true);
         self::assertEquals(
@@ -205,7 +206,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function allowPaymentRequestCanBeSet()
+    public function allowPaymentRequestCanBeSet(): void
     {
         $this->iframe = new Iframe('http://test.de');
         $this->iframe->setAllowPaymentRequest('1');
@@ -215,7 +216,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function allowFullScreenCanBeSet()
+    public function allowFullScreenCanBeSet(): void
     {
         $this->iframe = new Iframe('http://test.de');
         $this->iframe->setAllowFullScreen(true);
@@ -225,7 +226,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function srcCanBeChanged()
+    public function srcCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de');
         $this->iframe->setSrc('http://www.test.de');
@@ -235,7 +236,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function srcCannotBeChangedToAnInvalidValue()
+    public function srcCannotBeChangedToAnInvalidValue(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Host cannot be extracted from the src value "test"');
@@ -247,7 +248,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function sandboxCanBeChanged()
+    public function sandboxCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de');
         $this->iframe->setSandbox('allow-popups');
@@ -257,7 +258,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function sandboxCannotChangedToInvalidValues()
+    public function sandboxCannotChangedToInvalidValues(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Not allowed value "test" for the attribute sandbox.');
@@ -269,7 +270,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function heightCanBeChanged()
+    public function heightCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de');
         $this->iframe->setHeight(11);
@@ -279,7 +280,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function heightCannotBeChangedToAnInvalidValue()
+    public function heightCannotBeChangedToAnInvalidValue(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Height should be a positive integer or zero, "-11" given');
@@ -291,7 +292,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function widthCanBeChanged()
+    public function widthCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de');
         $this->iframe->setWidth(11);
@@ -301,7 +302,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function widthCannotBeChangedToAnInvalidValue()
+    public function widthCannotBeChangedToAnInvalidValue(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Width should be a positive integer or zero, "-13" given');
@@ -313,7 +314,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function classCanBeChanged()
+    public function classCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de', 'test1');
         $this->iframe->setClass('test2');
@@ -323,7 +324,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function nameCanBeChanged()
+    public function nameCanBeChanged(): void
     {
         $this->iframe = new Iframe('https://www.test.de', '', 'test1');
         $this->iframe->setName('test2');
@@ -333,7 +334,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function dataAttributesCanBeAdded()
+    public function dataAttributesCanBeAdded(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, '', 0, false, 'test1: 1; data-test2: 2');
         self::assertEquals(
@@ -345,7 +346,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function dataAttributesCanBeChanged()
+    public function dataAttributesCanBeChanged(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, '', 0, false, '');
         $this->iframe->setDataAttributes('data-test2: 2');
@@ -358,7 +359,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function dataAttributesCanNotBeChangedToInvalidValue()
+    public function dataAttributesCanNotBeChangedToInvalidValue(): void
     {
         $this->iframe = new Iframe('http://test.de', '', '', 0, 0, '', 0, false, '');
         $this->iframe->setDataAttributes('<dat>a-t>><st2: 2');
@@ -368,7 +369,7 @@ class IframeTest extends UnitTestCase
     /**
      * @test
      */
-    public function parsingSrcFromHTMLWorks()
+    public function parsingSrcFromHTMLWorks(): void
     {
         $html = '<iframe classs="test" src="https://player.test.video/id=?dasdas"></iframe>';
         $this->iframe = Iframe::parseSrcFromHtml($html);
@@ -376,6 +377,7 @@ class IframeTest extends UnitTestCase
         self::assertEquals('https://player.test.video/id=?dasdas', $this->iframe->getSrc());
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

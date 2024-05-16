@@ -23,6 +23,7 @@ use TYPO3\CMS\Core\Resource\FileInterface;
  */
 class VimeoRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VimeoRenderer
 {
+    #[\Override]
     public function getPriority()
     {
         return 10;
@@ -38,6 +39,7 @@ class VimeoRenderer extends \TYPO3\CMS\Core\Resource\Rendering\VimeoRenderer
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
+    #[\Override]
     public function render(FileInterface $file, $width, $height, array $options = null, $usedPathsRelativeToCurrentScript = false)
     {
         $iframeTag = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);

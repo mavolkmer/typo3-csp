@@ -19,20 +19,20 @@ class SourceKeywords
     /**
      * @var string
      */
-    const SELF = 'self';
+    public const SELF = 'self';
 
     /**
      * @var string
      */
-    const UNSAFE_INLINE = 'unsafe-inline';
+    public const UNSAFE_INLINE = 'unsafe-inline';
 
     /**
      * @var string
      */
-    const UNSAFE_EVAL = 'unsafe-eval';
+    public const UNSAFE_EVAL = 'unsafe-eval';
 
     /**
      * @var string
      */
-    const NONE = 'none';
+    public const NONE = 'none';
 }

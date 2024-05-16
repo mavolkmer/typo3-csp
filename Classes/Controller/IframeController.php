@@ -14,6 +14,7 @@
 
 namespace AndrasOtto\Csp\Controller;
 
+use Psr\Http\Message\ResponseInterface;
 use AndrasOtto\Csp\Utility\IframeUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 
@@ -26,7 +27,7 @@ class IframeController extends ActionController
      *
      * @return string
      */
-    public function renderAction()
+    public function renderAction(): ResponseInterface
     {
         $iframe = '';
 
@@ -35,6 +36,6 @@ class IframeController extends ActionController
             $iframe = IframeUtility::generateIframeTagFromConfigArray($this->settings['iframe']);
         }
 
-        return $iframe;
+        return $this->htmlResponse($iframe);
     }
 }

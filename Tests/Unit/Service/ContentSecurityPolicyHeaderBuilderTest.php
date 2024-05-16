@@ -30,6 +30,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -39,7 +40,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addNonceFillsTheDirectivesCorrectly()
+    public function addNonceFillsTheDirectivesCorrectly(): void
     {
         $this->subject->addNonce(Directives::SCRIPT_SRC, 'test');
         $header = $this->subject->getHeader();
@@ -49,7 +50,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addSourceFillsTheDirectivesCorrectly()
+    public function addSourceFillsTheDirectivesCorrectly(): void
     {
         $this->subject->addSourceExpression(Directives::SCRIPT_SRC, 'test');
         $header = $this->subject->getHeader();
@@ -59,7 +60,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addHashFillsTheDirectivesCorrectly()
+    public function addHashFillsTheDirectivesCorrectly(): void
     {
         $this->subject->addHash(HashTypes::SHA_384, 'test');
         $header = $this->subject->getHeader();
@@ -69,7 +70,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function checkDirectivesThrowsAnExceptionForWrongDirective()
+    public function checkDirectivesThrowsAnExceptionForWrongDirective(): void
     {
         $this->expectException(InvalidDirectiveException::class);
         $this->subject->addSourceExpression('test', 'test');
@@ -78,7 +79,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addHashThrowsAnExceptionForWrongHash()
+    public function addHashThrowsAnExceptionForWrongHash(): void
     {
         $this->expectException(UnsupportedHashAlgorithmException::class);
         $this->expectExceptionMessage('Unsupported hash algorithm detected \'test\'');
@@ -88,7 +89,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function resetDirectiveClearsTheSelectedDirective()
+    public function resetDirectiveClearsTheSelectedDirective(): void
     {
         $this->subject->addHash(HashTypes::SHA_384, 'test');
         $this->subject->resetDirective(Directives::SCRIPT_SRC);
@@ -99,7 +100,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function useReportOnlyChangesHeaderName()
+    public function useReportOnlyChangesHeaderName(): void
     {
         $this->subject->addHash(HashTypes::SHA_384, 'test');
         $this->subject->useReportingMode();
@@ -107,6 +108,7 @@ class ContentSecurityPolicyHeaderBuilderTest extends AbstractUnitTest
         self::assertEquals('Content-Security-Policy-Report-Only', $header['name']);
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

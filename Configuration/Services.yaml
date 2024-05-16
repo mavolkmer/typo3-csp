@@ -1,0 +1,4 @@
+AndrasOtto\Csp\ContentObject\ScriptContentObject:
+  tags:
+    - name: frontend.contentobject
+      identifier: 'SCRIPT'

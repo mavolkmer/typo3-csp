@@ -24,7 +24,7 @@ class TypoScriptFrontendControllerHook
      *
      * @param $pObjArray
      */
-    public function contentPostProcAll($pObjArray)
+    public function contentPostProcAll($pObjArray): void
     {
         if (isset($pObjArray['pObj'])) {
             /** @var TypoScriptFrontendController $typoScriptFrontendController */

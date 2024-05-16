@@ -27,6 +27,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -36,7 +37,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @return TypoScriptFrontendController
      */
-    private function setUpFakeBeUserAuthentication($admPanelActive)
+    private function setUpFakeBeUserAuthentication($admPanelActive): void
     {
         $beUser = new FrontendBackendUserAuthentication();
 
@@ -51,7 +52,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function contentSecurityPolicyBuilderInstanceCreated()
+    public function contentSecurityPolicyBuilderInstanceCreated(): void
     {
         $builder = ContentSecurityPolicyManager::getBuilder();
         self::assertInstanceOf(ContentSecurityPolicyHeaderBuilderInterface::class, $builder);
@@ -60,10 +61,10 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function invalidClassExceptionIfBuilderInterfaceNotImplemented()
+    public function invalidClassExceptionIfBuilderInterfaceNotImplemented(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['csp']['ContentSecurityPolicyHeaderBuilder'] =
-           'AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest';
+           \AndrasOtto\Csp\Tests\Unit\Service\ContentSecurityPolicyManagerTest::class;
 
         $this->expectException(InvalidClassException::class);
         $this->expectExceptionMessage('The class "AndrasOtto\\Csp\\Tests\\Unit\\Service\\ContentSecurityPolicyManagerTest" must implement the interface ContentSecurityPolicyHeaderBuilderInterface');
@@ -74,7 +75,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function sameBuilderClassUsed()
+    public function sameBuilderClassUsed(): void
     {
         $builder1 = ContentSecurityPolicyManager::getBuilder();
         $builder2 = ContentSecurityPolicyManager::getBuilder();
@@ -84,7 +85,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function resetBuilderCreatesNewBuilder()
+    public function resetBuilderCreatesNewBuilder(): void
     {
         $builder1 = ContentSecurityPolicyManager::getBuilder();
         ContentSecurityPolicyManager::resetBuilder();
@@ -95,7 +96,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function extractHeadersReturnsEmptyStringByDefault()
+    public function extractHeadersReturnsEmptyStringByDefault(): void
     {
         ContentSecurityPolicyManager::resetBuilder();
         $headers = ContentSecurityPolicyManager::extractHeaders();
@@ -106,7 +107,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addTypoScriptSettingsDoesNothingIfDisabled()
+    public function addTypoScriptSettingsDoesNothingIfDisabled(): void
     {
         $tsfe = $this->setUpFakeTsfe();
 
@@ -119,7 +120,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addTypoScriptSettingsAddsCorrectPresets()
+    public function addTypoScriptSettingsAddsCorrectPresets(): void
     {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
@@ -140,13 +141,13 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function addTypoScriptSettingsAddsAdditionalDomains()
+    public function addTypoScriptSettingsAddsAdditionalDomains(): void
     {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
 
-        $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.']['additionalSources.'] = [
+        $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.']['additionalSources.'] = [
             'script' => [
                 '0' => 'self',
                 '10' => 'www.test.de'
@@ -166,20 +167,20 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
     * @test
     */
-    public function reportOnlyModeGeneratesDefaultUriIfReportUriNotSet()
+    public function reportOnlyModeGeneratesDefaultUriIfReportUriNotSet(): void
     {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
 
-        $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.']['additionalSources.'] = [
+        $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.']['additionalSources.'] = [
             'script' => [
                 '0' => 'self',
                 '10' => 'www.test.de'
             ]
         ];
 
-        $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.']['reportOnly'] = 1;
+        $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.']['reportOnly'] = 1;
 
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
@@ -196,13 +197,13 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function correctUriRegisteredIfReportUriSet()
+    public function correctUriRegisteredIfReportUriSet(): void
     {
         $tsfe = $this->setUpFakeTsfe();
         $this->setUpFakeBeUserAuthentication(false);
         $tsfe->config['config']['csp.']['enabled'] = 1;
 
-        $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.']['report-uri'] = '/test/';
+        $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.']['report-uri'] = '/test/';
 
         ContentSecurityPolicyManager::addTypoScriptSettings($tsfe);
         $headers = ContentSecurityPolicyManager::extractHeaders();
@@ -216,6 +217,7 @@ class ContentSecurityPolicyManagerTest extends AbstractUnitTest
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

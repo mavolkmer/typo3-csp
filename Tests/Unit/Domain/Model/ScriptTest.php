@@ -26,6 +26,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         ContentSecurityPolicyManager::resetBuilder();
@@ -35,7 +36,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function generateScriptsCorrectly()
+    public function generateScriptsCorrectly(): void
     {
         $script = new Script('    
         alert("fine");    
@@ -46,7 +47,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function generateScriptsWithNoTrimScriptSet()
+    public function generateScriptsWithNoTrimScriptSet(): void
     {
         $script = new Script('    
         alert("fine");    
@@ -60,7 +61,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function notAllowedHashMethodThrowsException()
+    public function notAllowedHashMethodThrowsException(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Only the values "sha256", "sha384" and "sha512" are supported, "test" given');
@@ -71,7 +72,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function sha256AddedCorrectly()
+    public function sha256AddedCorrectly(): void
     {
         $script = new Script('var foo = "314"');
         $script->generateHtmlTag();
@@ -85,7 +86,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function sha512AddedCorrectly()
+    public function sha512AddedCorrectly(): void
     {
         $script = new Script('var foo = "314"', HashTypes::SHA_512);
         $script->generateHtmlTag();
@@ -99,7 +100,7 @@ class ScriptTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function testNonceModeForScript()
+    public function testNonceModeForScript(): void
     {
         $GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['csp'] = 'a:1:{s:12:"scriptMethod";s:1:"1";}';
         ContentSecurityPolicyManager::reloadConfig();
@@ -116,6 +117,7 @@ class ScriptTest extends AbstractUnitTest
         ContentSecurityPolicyManager::reloadConfig();
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

@@ -21,19 +21,19 @@ class HashTypes
      *
      * @var string
      */
-    const SHA_256 = 'sha256';
+    public const SHA_256 = 'sha256';
 
     /**
      * SHA 384 hash
      *
      * @var string
      */
-    const SHA_384 = 'sha384';
+    public const SHA_384 = 'sha384';
 
     /**
      * SHA 512 hash
      *
      * @var string
      */
-    const SHA_512 = 'sha512';
+    public const SHA_512 = 'sha512';
 }

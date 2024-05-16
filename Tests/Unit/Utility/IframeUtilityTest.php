@@ -23,6 +23,7 @@ class IframeUtilityTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -31,7 +32,7 @@ class IframeUtilityTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateIframeTagFromConfigArrayMapsPropertiesCorrectly()
+    public function generateIframeTagFromConfigArrayMapsPropertiesCorrectly(): void
     {
         $conf = [
             'src' => 'https://test.de',
@@ -51,6 +52,7 @@ class IframeUtilityTest extends UnitTestCase
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();
