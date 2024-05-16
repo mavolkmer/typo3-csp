@@ -14,7 +14,6 @@
 
 namespace AndrasOtto\Csp\Tests\Unit\Utility;
 
-use AndrasOtto\Csp\Constants\HashTypes;
 use AndrasOtto\Csp\Service\ContentSecurityPolicyManager;
 use AndrasOtto\Csp\ViewHelpers\ScriptViewHelper;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -29,6 +28,7 @@ class ScriptViewHelperTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -41,17 +41,13 @@ class ScriptViewHelperTest extends UnitTestCase
     /**
      * @test
      */
-    public function rendersEmptyScriptTag()
+    public function rendersEmptyScriptTag(): void
     {
-        $closure = function () {
-            return '';
-        };
+        $closure = fn() => '';
 
         $this->subject->setRenderChildrenClosure($closure);
 
-        $scriptMarkup = $this->subject->render(
-            HashTypes::SHA_256
-        );
+        $scriptMarkup = $this->subject->render();
 
         self::assertEquals(
             '',
@@ -62,19 +58,15 @@ class ScriptViewHelperTest extends UnitTestCase
     /**
      * @test
      */
-    public function rendersScriptTagCorrectly()
+    public function rendersScriptTagCorrectly(): void
     {
-        $closure = function () {
-            return '
+        $closure = fn() => '
                 alert(\'test\');
             ';
-        };
 
         $this->subject->setRenderChildrenClosure($closure);
 
-        $scriptMarkup = $this->subject->render(
-            HashTypes::SHA_256
-        );
+        $scriptMarkup = $this->subject->render();
 
         self::assertEquals(
             "<script>alert('test');</script>",
@@ -82,6 +74,7 @@ class ScriptViewHelperTest extends UnitTestCase
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

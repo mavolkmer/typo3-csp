@@ -45,7 +45,7 @@ class DataAttributeEvaluation
                 if (count($dataAttributes) === 0) {
                     throw new \Exception('No dataAttribute was generated.');
                 }
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $set = false;
             }
         }

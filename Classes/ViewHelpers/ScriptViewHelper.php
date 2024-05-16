@@ -30,7 +30,8 @@ class ScriptViewHelper extends AbstractTagBasedViewHelper
     /**
      * Initialize arguments.
      */
-    public function initializeArguments()
+    #[\Override]
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
@@ -42,6 +43,7 @@ class ScriptViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         if ($scriptText = $this->renderChildren()) {

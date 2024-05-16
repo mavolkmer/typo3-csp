@@ -29,6 +29,7 @@ class ScriptContentObjectTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -60,7 +61,7 @@ class ScriptContentObjectTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function generateScriptTag()
+    public function generateScriptTag(): void
     {
         $conf = $this->setUpConfArray();
         $scriptTag = $this->subject->render($conf);
@@ -71,7 +72,7 @@ class ScriptContentObjectTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function trimScriptTrimsTheTextLeftAndRight()
+    public function trimScriptTrimsTheTextLeftAndRight(): void
     {
         $conf = $this->setUpConfArray(HashTypes::SHA_256, 1);
         $scriptTag = $this->subject->render($conf);
@@ -79,6 +80,7 @@ class ScriptContentObjectTest extends AbstractUnitTest
         self::assertEquals('<script>alert("ok");</script>', $scriptTag);
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

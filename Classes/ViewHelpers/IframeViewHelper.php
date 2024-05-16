@@ -30,7 +30,8 @@ class IframeViewHelper extends AbstractTagBasedViewHelper
     /**
      * Initialize arguments.
      */
-    public function initializeArguments()
+    #[\Override]
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerUniversalTagAttributes();
@@ -48,6 +49,7 @@ class IframeViewHelper extends AbstractTagBasedViewHelper
      *
      * @return string
      */
+    #[\Override]
     public function render()
     {
         $iframe = new Iframe(

@@ -29,6 +29,7 @@ class YoutubeRendererTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -39,7 +40,7 @@ class YoutubeRendererTest extends UnitTestCase
     /**
      * @test
      */
-    public function getPriorityReturnsTen()
+    public function getPriorityReturnsTen(): void
     {
         self::assertEquals(10, $this->subject->getPriority());
     }
@@ -47,7 +48,7 @@ class YoutubeRendererTest extends UnitTestCase
     /**
      * @test
      */
-    public function rendersIframe()
+    public function rendersIframe(): void
     {
         $onlineMediaHelper = $this->getMockClass(YouTubeHelper::class, ['getOnlineMediaId'], ['youtube']);
         $onlineMediaHelper->expects(self::once())->method('getOnlineMediaId')->willReturn('test');
@@ -63,6 +64,7 @@ class YoutubeRendererTest extends UnitTestCase
         self::assertEquals('frame-src www.youtube.com; child-src www.youtube.com;', $header['value']);
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

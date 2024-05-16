@@ -26,12 +26,14 @@ class TypoScriptFrontendControllerHookTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
         $this->subject = new TypoScriptFrontendControllerHook();
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         unset($this->subject);
@@ -41,7 +43,7 @@ class TypoScriptFrontendControllerHookTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function contentPostProcAllCanBeCalled()
+    public function contentPostProcAllCanBeCalled(): void
     {
         $tsfe = $this->setUpFakeTsfe(1);
         $this->subject->contentPostProcAll(['pObj' => $tsfe]);

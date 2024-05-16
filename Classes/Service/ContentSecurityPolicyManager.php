@@ -21,16 +21,15 @@ use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class ContentSecurityPolicyManager implements SingletonInterface
 {
-    const DIRECTIVE_POSTFIX = '-src';
+    public const DIRECTIVE_POSTFIX = '-src';
 
-    const SCRIPT_MODE_HASH = 0;
+    public const SCRIPT_MODE_HASH = 0;
 
-    const SCRIPT_MODE_NONCE = 1;
+    public const SCRIPT_MODE_NONCE = 1;
 
     private static $reportScriptPath = 'Resources/Public/report.php';
 
@@ -102,13 +101,14 @@ class ContentSecurityPolicyManager implements SingletonInterface
     protected static function getExtensionConfiguration()
     {
         if (!self::$extensionConfigurationLoaded) {
-            /** @var ObjectManager $objectManager */
-            $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-
-            /** @var ExtensionConfiguration $configurationUtility */
-            $configurationUtility = $objectManager->get(ExtensionConfiguration::class);
-            self::$extensionConfiguration = $configurationUtility->get('csp');
-            self::$extensionConfigurationLoaded = true;
+            try {
+                $extensionConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+                $configuration =
+                self::$extensionConfiguration = $extensionConfiguration->get('csp');
+                self::$extensionConfigurationLoaded = true;
+            } catch (\Exception $exception) {
+                // do nothing
+            }
         }
         return self::$extensionConfiguration;
     }
@@ -155,7 +155,7 @@ class ContentSecurityPolicyManager implements SingletonInterface
     /**
      * Resets the header builder to a new instance
      */
-    public static function resetBuilder()
+    public static function resetBuilder(): void
     {
         self::$headerBuilder = self::createNewBuilderInstance();
     }
@@ -165,7 +165,7 @@ class ContentSecurityPolicyManager implements SingletonInterface
      *
      * @internal
      */
-    public static function reloadConfig()
+    public static function reloadConfig(): void
     {
         self::$extensionConfigurationLoaded = false;
         self::getExtensionConfiguration();
@@ -174,18 +174,18 @@ class ContentSecurityPolicyManager implements SingletonInterface
     /**
      * @param TypoScriptFrontendController $tsfe
      */
-    public static function addTypoScriptSettings($tsfe)
+    public static function addTypoScriptSettings($tsfe): void
     {
         $enabled = (bool)($tsfe->config['config']['csp.']['enabled'] ?? false);
 
         if ($enabled) {
             $builder = self::getBuilder();
 
-            $config = $tsfe->tmpl->setup['plugin.']['tx_csp.']['settings.'];
+            $config = $GLOBALS['TYPO3_REQUEST']->getAttribute('frontend.typoscript')->getSetupArray()['plugin.']['tx_csp.']['settings.'];
 
             if (isset($config['additionalSources.'])) {
                 foreach ($config['additionalSources.'] as $directive => $sources) {
-                    $directive = rtrim($directive, '.');
+                    $directive = rtrim((string) $directive, '.');
                     foreach ($sources as $source) {
                         if (!in_array($directive, self::$nonSourceDirectives)) {
                             $builder->addSourceExpression($directive . self::DIRECTIVE_POSTFIX, $source);
@@ -224,7 +224,7 @@ class ContentSecurityPolicyManager implements SingletonInterface
                         ExtensionManagementUtility::extPath('csp') . self::$reportScriptPath;
 
                     $relativeReportScriptPath =
-                        PathUtility::getRelativePath(PATH_site . TYPO3_mainDir, $absoluteReportScriptPath);
+                        PathUtility::getRelativePath(\PATH_SITE . \TYPO3_MAINDIR, $absoluteReportScriptPath);
 
                     if ($relativeReportScriptPath) {
                         //Make an absolute path from the site root to the script
@@ -239,7 +239,7 @@ class ContentSecurityPolicyManager implements SingletonInterface
             }
             if (isset($config['report-uri'])
                 && $config['report-uri']) {
-                $builder->addSourceExpression(Directives::REPORT_URI, htmlspecialchars($config['report-uri']));
+                $builder->addSourceExpression(Directives::REPORT_URI, htmlspecialchars((string) $config['report-uri']));
             }
         }
     }

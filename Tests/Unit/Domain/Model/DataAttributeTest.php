@@ -24,6 +24,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -32,7 +33,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function createsValidDataAttribute()
+    public function createsValidDataAttribute(): void
     {
         new DataAttribute('test', 'test');
     }
@@ -40,7 +41,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function semicolonsAreNotAllowedInName()
+    public function semicolonsAreNotAllowedInName(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "a;b" given');
@@ -52,7 +53,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function xmlIsNotAllowedAtTheBeginning()
+    public function xmlIsNotAllowedAtTheBeginning(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "xml-test" given');
@@ -64,7 +65,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function xmlAllowedIfNotAtTheBeginning()
+    public function xmlAllowedIfNotAtTheBeginning(): void
     {
         new DataAttribute('test-xml', 'test');
     }
@@ -72,7 +73,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function nameShouldBeValidXmlName()
+    public function nameShouldBeValidXmlName(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "a<b>c" given');
@@ -84,7 +85,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function capitalLettersInNameAreIgnored()
+    public function capitalLettersInNameAreIgnored(): void
     {
         $dataAttribute = new DataAttribute('test', 'test');
         self::assertEquals(
@@ -96,7 +97,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function nameEnsuredBySet()
+    public function nameEnsuredBySet(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage('Name should be a valid xml name, must not start with "xml" and semicolons are not allowed, "a<b>c" given');
@@ -108,7 +109,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function nameCanChangedAfterCreatingTheObject()
+    public function nameCanChangedAfterCreatingTheObject(): void
     {
         $dataAttribute = new DataAttribute('test1', 'test');
         $dataAttribute->setName('test2');
@@ -121,7 +122,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function whitespaceCharactersAreNotAllowedInName()
+    public function whitespaceCharactersAreNotAllowedInName(): void
     {
         $this->expectException(InvalidValueException::class);
         $this->expectExceptionMessage("Name should be a valid xml name, must not start with \"xml\" and semicolons are not allowed, \"test \t\n test\" given");
@@ -131,7 +132,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function dataPrefixAddedOnlyIfNotAlreadyPrefixed()
+    public function dataPrefixAddedOnlyIfNotAlreadyPrefixed(): void
     {
         $dataAttribute = new DataAttribute('data-test', 'test');
         self::assertEquals(
@@ -143,7 +144,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function valueHtmlCharactersAreEscapedInConstructor()
+    public function valueHtmlCharactersAreEscapedInConstructor(): void
     {
         $dataAttribute = new DataAttribute('data-test', '/><script>alert(\'ok\');</script>');
         self::assertEquals(
@@ -155,7 +156,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function valueHtmlCharactersAreEscapedBySet()
+    public function valueHtmlCharactersAreEscapedBySet(): void
     {
         $dataAttribute = new DataAttribute('data-test');
         $dataAttribute->setValue('/><script>alert(\'ok\');</script>');
@@ -168,7 +169,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateDataAttributeFromDefinitionCanGenerateValidAttribute()
+    public function generateDataAttributeFromDefinitionCanGenerateValidAttribute(): void
     {
         $dataAttribute = DataAttribute::generateAttributeFromString('attr1: value1');
         self::assertEquals(
@@ -184,7 +185,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateDataAttributeFromDefinitionForEmptyReturnsNull()
+    public function generateDataAttributeFromDefinitionForEmptyReturnsNull(): void
     {
         $dataAttribute = DataAttribute::generateAttributeFromString('');
         self::assertNull($dataAttribute);
@@ -193,7 +194,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function acceptSecondSeparatorAsValidValue()
+    public function acceptSecondSeparatorAsValidValue(): void
     {
         $dataAttribute = DataAttribute::generateAttributeFromString('attr1: value1:value2');
 
@@ -206,7 +207,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateDataAttributesFromDefinitionCanGenerateValidAttributes()
+    public function generateDataAttributesFromDefinitionCanGenerateValidAttributes(): void
     {
         $dataAttributes = DataAttribute::generateAttributesFromString('attr1: value1; attr2');
         self::assertEquals(
@@ -218,7 +219,7 @@ class DataAttributeTest extends UnitTestCase
     /**
      * @test
      */
-    public function generateDataAttributesFromDefinitionIgnoresEmptyNames()
+    public function generateDataAttributesFromDefinitionIgnoresEmptyNames(): void
     {
         $dataAttributes = DataAttribute::generateAttributesFromString('attr1: value1;;  ;      ; data-attr2 ');
         self::assertEquals(
@@ -231,6 +232,7 @@ class DataAttributeTest extends UnitTestCase
         self::assertEquals('data-attr2', $dataAttribute->getName());
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

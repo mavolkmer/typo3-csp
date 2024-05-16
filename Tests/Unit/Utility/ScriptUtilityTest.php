@@ -24,6 +24,7 @@ class ScriptUtilityTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         ContentSecurityPolicyManager::resetBuilder();
@@ -33,7 +34,7 @@ class ScriptUtilityTest extends UnitTestCase
     /**
      * @test
      */
-    public function scriptTagCorrectlyAttachedToScriptCode()
+    public function scriptTagCorrectlyAttachedToScriptCode(): void
     {
         $preparedScript = ScriptUtility::getValidScriptTag('   alert("Hello!");    ');
         self::assertEquals('<script>alert("Hello!");</script>', $preparedScript);
@@ -42,7 +43,7 @@ class ScriptUtilityTest extends UnitTestCase
     /**
      * @test
      */
-    public function hashAddedCorrectly()
+    public function hashAddedCorrectly(): void
     {
         ScriptUtility::getValidScriptTag('var foo = "314"');
         $headers = ContentSecurityPolicyManager::extractHeaders();
@@ -52,6 +53,7 @@ class ScriptUtilityTest extends UnitTestCase
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

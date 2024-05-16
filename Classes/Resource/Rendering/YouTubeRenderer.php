@@ -22,6 +22,7 @@ use TYPO3\CMS\Core\Resource\FileInterface;
  */
 class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
 {
+    #[\Override]
     public function getPriority()
     {
         return 10;
@@ -37,6 +38,7 @@ class YouTubeRenderer extends \TYPO3\CMS\Core\Resource\Rendering\YouTubeRenderer
      * @param bool $usedPathsRelativeToCurrentScript See $file->getPublicUrl()
      * @return string
      */
+    #[\Override]
     public function render(FileInterface $file, $width, $height, array $options = null, $usedPathsRelativeToCurrentScript = false)
     {
         $iframeTag = parent::render($file, $width, $height, $options, $usedPathsRelativeToCurrentScript);

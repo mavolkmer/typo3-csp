@@ -29,6 +29,7 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -98,7 +99,7 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function preProcessFunctionCanBeCalled()
+    public function preProcessFunctionCanBeCalled(): void
     {
         $null = null;
         $emptyArray = [];
@@ -108,7 +109,7 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function iframePreviewHeaderContentCanBeGenerated()
+    public function iframePreviewHeaderContentCanBeGenerated(): void
     {
         $null = null;
         $headerContent = '';
@@ -120,7 +121,7 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function iframePreviewItemContentCanBeGenerated()
+    public function iframePreviewItemContentCanBeGenerated(): void
     {
         $null = null;
         $itemContent = '';
@@ -136,7 +137,7 @@ class PageLayoutViewTest extends UnitTestCase
     /**
      * @test
      */
-    public function dataAttributeCanBeGenerated()
+    public function dataAttributeCanBeGenerated(): void
     {
         $null = null;
         $itemContent = '';
@@ -161,6 +162,7 @@ class PageLayoutViewTest extends UnitTestCase
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

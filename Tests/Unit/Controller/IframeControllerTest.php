@@ -26,6 +26,7 @@ class IframeControllerTest extends AbstractUnitTest
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -47,7 +48,7 @@ class IframeControllerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function renderActionExists()
+    public function renderActionExists(): void
     {
         $this->createMockWithSettings();
         $this->subject->renderAction();
@@ -56,7 +57,7 @@ class IframeControllerTest extends AbstractUnitTest
     /**
      * @test
      */
-    public function returnsCorrectIframeTag()
+    public function returnsCorrectIframeTag(): void
     {
         $this->createMockWithSettings(['iframe' => ['src' => 'https://www.test.com']]);
         $iframeMarkup = $this->subject->renderAction();
@@ -66,6 +67,7 @@ class IframeControllerTest extends AbstractUnitTest
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();

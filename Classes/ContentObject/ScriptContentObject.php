@@ -26,22 +26,13 @@ class ScriptContentObject extends TextContentObject
 {
 
     /**
-     * Default constructor.
-     *
-     * @param ContentObjectRenderer $cObj
-     */
-    public function __construct(ContentObjectRenderer $cObj)
-    {
-        parent::__construct($cObj);
-    }
-
-    /**
      * Rendering the cObject, TEXT
      *
      * @param array $conf Array of TypoScript properties
      * @return string Output
      */
-    public function render($conf = [])
+    #[\Override]
+    public function render($conf = []): string
     {
         $content = parent::render($conf);
 

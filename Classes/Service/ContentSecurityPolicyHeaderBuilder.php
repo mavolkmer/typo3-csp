@@ -99,7 +99,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param $directive
      * @param $value
      */
-    private function addDirectiveBlock($blockName, $directive, $value)
+    private function addDirectiveBlock($blockName, $directive, $value): void
     {
         if (!(isset($this->directives[$directive]) && is_array($this->directives[$directive]))) {
             $this->directives[$directive] = [];
@@ -120,7 +120,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param string $nonce
      * @throws InvalidDirectiveException
      */
-    public function addNonce($directive, $nonce)
+    #[\Override]
+    public function addNonce($directive, $nonce): void
     {
         $this->checkDirective($directive);
         $this->addDirectiveBlock('nonces', $directive, $nonce);
@@ -131,7 +132,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param string $expression
      * @throws InvalidDirectiveException
      */
-    public function addSourceExpression($directive, $expression)
+    #[\Override]
+    public function addSourceExpression($directive, $expression): void
     {
         $this->checkDirective($directive);
         $this->addDirectiveBlock('expressions', $directive, $expression);
@@ -144,7 +146,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param string $hash
      * @throws UnsupportedHashAlgorithmException
      */
-    public function addHash($type, $hash)
+    #[\Override]
+    public function addHash($type, $hash): void
     {
         if (!in_array($type, $this->allowedHashAlgorithmValues)) {
             throw new UnsupportedHashAlgorithmException(
@@ -169,6 +172,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      *
      * @return array
      */
+    #[\Override]
     public function getHeader()
     {
         $value = $this->getValue();
@@ -227,14 +231,12 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
         if (isset($directive['hashes']) && is_array($directive['hashes'])) {
             foreach ($directive['hashes'] as $type => $hashes) {
                 foreach ($hashes as $hash) {
-                    $expressions[] = sprintf("'%s-%s'", $type, base64_encode($hash));
+                    $expressions[] = sprintf("'%s-%s'", $type, base64_encode((string) $hash));
                 }
             }
         }
 
-        return trim(implode(' ', array_map(function ($value) {
-            return $this->encodeDirectiveValue($value);
-        }, $expressions)));
+        return trim(implode(' ', array_map(fn($value) => $this->encodeDirectiveValue($value), $expressions)));
     }
 
     /**
@@ -243,7 +245,7 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      * @param $directive
      * @throws InvalidDirectiveException
      */
-    private function checkDirective($directive)
+    private function checkDirective($directive): void
     {
         if (!in_array($directive, $this->allowedDirectives)) {
             throw new InvalidDirectiveException(
@@ -272,7 +274,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      *
      * @param string $directive
      */
-    public function resetDirective($directive)
+    #[\Override]
+    public function resetDirective($directive): void
     {
         $this->checkDirective($directive);
 
@@ -282,7 +285,8 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
     /**
      * Sets the header name
      */
-    public function useReportingMode()
+    #[\Override]
+    public function useReportingMode(): void
     {
         $this->headerName = $this->reportHeaderName;
     }

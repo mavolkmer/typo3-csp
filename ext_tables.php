@@ -13,25 +13,9 @@
  * The TYPO3 project - inspiring people to share!
  */
 
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
-
-/**
- * Static TypoScript
- */
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-    'csp',
-    'Configuration/TypoScript',
-    'Main CSP Settings'
-);
-
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-    'AndrasOtto.csp',
-    'IframePlugin',
-    'LLL:EXT:csp/Resources/Private/Language/backend.xlf:plugin.iframe.title',
-    'LLL:EXT:csp/Resources/Private/Language/backend.xlf:plugin.iframe.description'
-);
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['csp']['ContentSecurityPolicyHeaderBuilder'] =
     \AndrasOtto\Csp\Service\ContentSecurityPolicyHeaderBuilder::class;

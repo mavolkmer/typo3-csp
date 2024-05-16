@@ -28,6 +28,7 @@ class IframeViewHelperTest extends UnitTestCase
     /**
      * Setup global
      */
+    #[\Override]
     public function setUp(): void
     {
         parent::setUp();
@@ -39,33 +40,25 @@ class IframeViewHelperTest extends UnitTestCase
     /**
      * @test
      */
-    public function throwsExceptionWithEmptySrc()
+    public function throwsExceptionWithEmptySrc(): void
     {
         $this->expectException(InvalidValueException::class);
-        $this->subject->render('');
+        $this->subject->render();
     }
 
     /**
      * @test
      */
-    public function rendersIframeTagCorrectly()
+    public function rendersIframeTagCorrectly(): void
     {
-        $iframeMarkup = $this->subject->render(
-            'https://test.de',
-            'test-class multiple',
-            'conf-test',
-            150,
-            160,
-            'allow-forms, allow-popups',
-            1,
-            1
-        );
+        $iframeMarkup = $this->subject->render();
         self::assertEquals(
             '<iframe src="https://test.de" name="conf-test" class="test-class multiple" width="150" height="160" sandbox="allow-forms allow-popups" allowfullscreen="allowfullscreen" allowpaymentrequest="allowpaymentrequest"></iframe>',
             $iframeMarkup
         );
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         parent::tearDown();
