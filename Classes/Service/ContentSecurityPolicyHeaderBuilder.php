@@ -146,9 +146,10 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
      *
      * @param string $type
      * @param string $hash
+     * @param string $directive
      * @throws UnsupportedHashAlgorithmException
      */
-    public function addHash($type, $hash)
+    public function addHash($type, $hash, string $directive = Directives::SCRIPT_SRC)
     {
         if(!in_array($type, $this->allowedHashAlgorithmValues)) {
             throw new UnsupportedHashAlgorithmException(
@@ -156,7 +157,6 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
             );
         }
 
-        $directive = Directives::SCRIPT_SRC;
         if (!(isset($this->directives[$directive]) && is_array($this->directives[$directive]))) {
             $this->directives[$directive] = [];
         }
@@ -165,7 +165,12 @@ class ContentSecurityPolicyHeaderBuilder implements ContentSecurityPolicyHeaderB
             $this->directives[$directive]['hashes'] = [];
         }
 
-        $this->directives[$directive]['hashes'][$type][] = $hash;
+        if (
+            ! is_array($this->directives[$directive]['hashes'][$type])
+            || ! in_array($hash, $this->directives[$directive]['hashes'][$type])
+        ) {
+            $this->directives[$directive]['hashes'][$type][] = $hash;
+        }
     }
 
     /**
